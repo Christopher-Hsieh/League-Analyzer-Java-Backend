@@ -2,6 +2,7 @@
 
 ## AWS resources
 Using secret and access key for ES - http://mytechbites.blogspot.in/2017/04/secure-amazon-elastic-search-service.html
+Standard info on ES AWS - https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html
 
 ## Included from spring
 - Actuator + docs

@@ -1,5 +1,8 @@
 # League-Analyzer-Java-Backend
 
+## AWS resources
+Using secret and access key for ES - http://mytechbites.blogspot.in/2017/04/secure-amazon-elastic-search-service.html
+
 ## Included from spring
 - Actuator + docs
 - Cloud connectors + Cloud Security (need to make sure compatible with platform)

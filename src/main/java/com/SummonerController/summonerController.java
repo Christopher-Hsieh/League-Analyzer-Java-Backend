@@ -35,9 +35,10 @@ public class summonerController {
 		Summoner summoner = summoners.get(name);
 		long id = summoner.getId();
 		System.out.println(id);
-
+		
     	
     	
         return summoner;
     }
+    
 }

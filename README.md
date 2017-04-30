@@ -4,6 +4,11 @@
 Using secret and access key for ES - http://mytechbites.blogspot.in/2017/04/secure-amazon-elastic-search-service.html
 Standard info on ES AWS - https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html
 
+### Application Details
+- Java 8
+- Maven 3.3.9
+- Spring 1.5.2
+
 ## Included from spring
 - Actuator + docs
 - Cloud connectors + Cloud Security (need to make sure compatible with platform)
@@ -27,9 +32,10 @@ http://taycaldwell.com/riot-api-java/doc/
 
 ## Your Most Popular Build
 Input: Summoner Name
-SummonerName -> SUMMONER-V3 /lol/summoner/v3/summoners/by-name/{summonerName} -> account id
-account id -> MATCH-V3 /lol/match/v3/matchlists/by-account/{accountId} -> List of gameIds
-gameIds -> MATCH-V3 /lol/match/v3/matches/{matchId} -> ChampionId & corresponding items
+(DONE) SummonerName -> SUMMONER-V3 /lol/summoner/v3/summoners/by-name/{summonerName} -> account id
+(DONE) account id -> MATCH-V3 /lol/match/v3/matchlists/by-account/{accountId} -> List of gameIds
+(DONE) gameIds -> MATCH-V3 /lol/match/v3/matches/{matchId} -> Map <ChampionId, gameIds> 
+Map <ChampionId, gameIds> -> TODO -> Map <ChampionId, Items>
 -> Aggregate ChampionId[item1%, item2%, ..., itemn%]
 -> Display list of champions and their item%s
 Output: Previously played champions and your item pick %

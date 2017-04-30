@@ -1,4 +1,4 @@
-package com.SummonerController;
+package com.meta.analyzer.controllers.simpleController;
 
 import java.util.Map;
 

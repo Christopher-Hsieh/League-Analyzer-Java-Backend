@@ -1,4 +1,4 @@
-package com.riot.api.grabber;
+package com.meta.analyzer.riot.api.grabber;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +24,7 @@ import net.rithms.riot.dto.Summoner.Summoner;
  * Class for making calls to Riot Api for match history and match info
  */
 @Component
-public class Match {
+public class MatchHistory {
 
 	// Globals
 	String summonerName = "";

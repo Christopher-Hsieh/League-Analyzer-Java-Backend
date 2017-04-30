@@ -1,4 +1,4 @@
-package com.riot.api.grabber;
+package com.meta.analyzer.riot.api.grabber;
 
 import java.util.Collection;
 import java.util.HashMap;

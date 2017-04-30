@@ -1,4 +1,4 @@
-package com.LeagueAnalyzerJavaBackend;
+package com.meta.analyzer;
 
 import java.util.Map;
 
@@ -15,9 +15,7 @@ import net.rithms.riot.constant.Region;
 
 @SpringBootApplication
 @PropertySource("classpath:/connections.properties")
-@ComponentScan({"com.SummonerController",
-				"com.LeagueAnalyzerJavaBackend",
-				"com.riot.api.grabber"})
+@ComponentScan({"com.meta.analyzer.*","com.meta.analyzer"})
 public class Application {
 
 	public static void main(String[] args)  {

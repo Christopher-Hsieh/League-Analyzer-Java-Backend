@@ -18,8 +18,11 @@ Standard info on ES AWS - https://docs.aws.amazon.com/elasticsearch-service/late
 
 ## External Dependencies
 com.github.rithms | riot-api-java (java wrapper for riot's api)
+
 https://github.com/taycaldwell/riot-api-java
+
 Documentation
+
 http://taycaldwell.com/riot-api-java/doc/
 
 ## Your Most Popular Build

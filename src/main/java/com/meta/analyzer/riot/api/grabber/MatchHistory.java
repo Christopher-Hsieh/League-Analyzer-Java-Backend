@@ -36,7 +36,7 @@ public class MatchHistory {
 	}
 	
 	
-	@PostConstruct
+	//@PostConstruct
 	/**
 	 * 
 	 * @return Map<Champion ID, ArrayList<Match ID>>

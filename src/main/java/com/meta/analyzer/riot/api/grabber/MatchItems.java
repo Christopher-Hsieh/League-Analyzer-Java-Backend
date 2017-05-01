@@ -21,7 +21,7 @@ import net.rithms.riot.dto.Match.ParticipantStats;
  * OUTPUT: aggregate of all items to champion Ids
  */
 @Component
-public class MatchListItems {
+public class MatchItems {
 
 	@Autowired
 	RiotApi api;
@@ -29,11 +29,22 @@ public class MatchListItems {
 	Map<Long, Collection<Long>> championMatchMap;
 	String summonerName;
 	
-	/**
-	 * @param championMatchMap List of Champion IDs mapped to Match Ids. Ex. Map<Champion ID, ArrayList<Match ID>>
-	 * @param summonerName
+	/*
+	 * Methods
+	 * getMatchHistoryItems() - Get an entire summoners match history worth of items
+	 * getMatchItemsForSummoner(long matchId) - return item list for single match from summoner
+	 * getParticipantId(long matchId) - return summonerName's participantId for that match
 	 */
-	public MatchListItems(Map<Long, Collection<Long>> championMatchMap, String summonerName) {
+	
+	/*
+	 * Get an entire summoners match history worth of items
+	 * MatchId, Items
+	 */
+	public void getEntireMatchHistoryItems() {
+
+	}
+
+	public MatchItems(Map<Long, Collection<Long>> championMatchMap, String summonerName) {
 		this.championMatchMap = new HashMap<Long, Collection<Long>>(championMatchMap);
 		this.summonerName = summonerName;
 	}
@@ -50,11 +61,7 @@ public class MatchListItems {
 		System.out.println(stats.getItem6());
 	}
 	
-	/**
-	 * @param matchId
-	 * @return participant Id of the global summonerName
-	 * @throws RiotApiException
-	 */
+
 	public int getParticipantId(long matchId) throws RiotApiException {
 		MatchDetail detail = api.getMatch(matchId);
 

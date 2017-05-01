@@ -25,12 +25,16 @@ import net.rithms.riot.dto.Summoner.Summoner;
  */
 @Component
 public class MatchHistory {
-
-	// Globals
-	String summonerName = "";
 	
 	@Autowired
 	RiotApi api;
+	
+	String summonerName;
+	
+	public MatchHistory(String summonerName) {
+		this.summonerName = summonerName;
+	}
+	
 	
 	@PostConstruct
 	/**
@@ -47,7 +51,7 @@ public class MatchHistory {
 		 */
 		Map<Long, Collection<Long>> championMatchMap = new HashMap<Long, Collection<Long>>();
 		
-		MatchList matchList = api.getMatchList(getSummonerName().getId());
+		MatchList matchList = api.getMatchList(getSummoner().getId());
 		
 		for (int i =0; i < matchList.getEndIndex(); i++) {
 			// printMatchReference(matchList.getMatches().get(i));
@@ -65,16 +69,15 @@ public class MatchHistory {
 				championMatchMap.get(championId).add(matchId);
 			}
 		}
-		printChampionMatchMap(championMatchMap);
+		// printChampionMatchMap(championMatchMap);
 		return championMatchMap;
 	}
 	
 	
 	// TODO make dynamic setting of name for calls
-	public Summoner getSummonerName() throws RiotApiException {
-		Summoner in = api.getSummonerByName("firebun");
-		summonerName = "firebun";
-		return in;
+	public Summoner getSummoner() throws RiotApiException {
+		Summoner summoner = api.getSummonerByName(summonerName);
+		return summoner;
 	}
 	
 	public void printChampionMatchMap( Map<Long, Collection<Long>> championMatchMap) throws RiotApiException {

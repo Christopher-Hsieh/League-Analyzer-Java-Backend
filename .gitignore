@@ -1,5 +1,10 @@
+## Eclipse Maven ###
 target/
 !.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw*
+
+
 
 ### STS ###
 .apt_generated

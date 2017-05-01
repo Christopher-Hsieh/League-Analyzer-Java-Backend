@@ -21,13 +21,13 @@ com.github.rithms | [riot-api-java Java Wrapper For API](https://github.com/tayc
 ## Project Structure
 ```
 com.meta.analyzer
-    ├── Application.java				<= Startup Spring Boot
+    ├── Application.java	<= Startup Spring Boot
     ├── ApplicationProperties.java
     │ 
-    ├── .riot.api.aggregator			<= Main controller for riot api calls 
-    ├── .riot.api.grabber				<= Seperate method implementation for Riot Api calls
-    │	 	├── MatchHistory			<= Get all info concering match history
-    │	 	├── MatchItems				<= Get items based on overall match history, individual match, etc.
+    ├── .riot.api.aggregator	<= Main controller for riot api calls 
+    ├── .riot.api.grabber	<= Seperate method implementation for Riot Api calls
+    │	 	├── MatchHistory	<= Get all info concering match history
+    │	 	├── MatchItems	<= Get items based on overall match history, individual match, etc.
 ```
 ---
 ## In progress part of README

@@ -2,7 +2,6 @@ package com.meta.analyzer.elasticsearch;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 import com.amazonaws.AmazonWebServiceResponse;
 import com.amazonaws.http.HttpResponseHandler;

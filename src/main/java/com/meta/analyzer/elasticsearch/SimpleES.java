@@ -8,25 +8,17 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.AmazonWebServiceResponse;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.DefaultRequest;
 import com.amazonaws.Request;
-import com.amazonaws.Response;
 import com.amazonaws.SdkBaseException;
 import com.amazonaws.auth.AWS4Signer;
 import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.http.AmazonHttpClient;
 import com.amazonaws.http.AmazonHttpClient.RequestExecutionBuilder;
-import com.amazonaws.util.IOUtils;
 import com.amazonaws.http.ExecutionContext;
 import com.amazonaws.http.HttpMethodName;
-import com.amazonaws.http.HttpResponse;
-import com.amazonaws.http.HttpResponseHandler;
 import com.meta.analyzer.ApplicationProperties;
 
 @Component
@@ -89,7 +81,7 @@ public class SimpleES {
 	       //              client.execute(request, responseHandler, errorHandler, context);
 	}
 	
-	@PostConstruct
+	//@PostConstruct
 	public void testSimpleES() {
 	       // Generate the request
 	       Request<?> request = generateRequest("{\"field\":\"fieldValue\"}");

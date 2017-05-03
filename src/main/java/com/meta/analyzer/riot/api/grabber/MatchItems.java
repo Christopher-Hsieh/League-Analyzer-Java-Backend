@@ -26,31 +26,26 @@ public class MatchItems {
 	@Autowired
 	RiotApi api;
 	
-	Map<Long, Collection<Long>> championMatchMap;
-	String summonerName;
-	
 	/*
 	 * Methods
-	 * getMatchHistoryItems() - Get an entire summoners match history worth of items
 	 * getMatchItemsForSummoner(long matchId) - return item list for single match from summoner
 	 * getParticipantId(long matchId) - return summonerName's participantId for that match
 	 */
-	
-	/*
-	 * Get an entire summoners match history worth of items
-	 * MatchId, Items
-	 */
-	public void getEntireMatchHistoryItems() {
-
+	public ItemListData getMatchItemsForSummoner(long matchID, String summonerName) throws RiotApiException {
+		int participantID = getParticipantID(matchID, summonerName);
+		
+		// Name change maybe, handle it
+		if (participantID == -1) {
+			return null;
+		}
+		
+		ParticipantStats stats = api.getMatch(matchID).getParticipants().get(participantID-1).getStats();
+		return new ItemListData(stats.getItem0(), stats.getItem1(), stats.getItem2(), 
+								stats.getItem3(), stats.getItem4(), stats.getItem5(), stats.getItem6());
 	}
-
-	public MatchItems(Map<Long, Collection<Long>> championMatchMap, String summonerName) {
-		this.championMatchMap = new HashMap<Long, Collection<Long>>(championMatchMap);
-		this.summonerName = summonerName;
-	}
 	
-	public void getItems(long matchId, int participantId) throws RiotApiException {
-		ParticipantStats stats = api.getMatch(matchId).getParticipants().get(participantId).getStats();
+	public void getItems(long matchId, int participantID) throws RiotApiException {
+		ParticipantStats stats = api.getMatch(matchId).getParticipants().get(participantID-1).getStats();
 		System.out.println("Item List: ");
 		System.out.println(stats.getItem0());
 		System.out.println(stats.getItem1());
@@ -62,7 +57,7 @@ public class MatchItems {
 	}
 	
 
-	public int getParticipantId(long matchId) throws RiotApiException {
+	public int getParticipantID(long matchId, String summonerName) throws RiotApiException {
 		MatchDetail detail = api.getMatch(matchId);
 
 		List<ParticipantIdentity> participantIdentitiesList = detail.getParticipantIdentities();
@@ -71,6 +66,7 @@ public class MatchItems {
 				return identity.getParticipantId();
 			}
 		}
+		// Returning -1 means that the user likely changed their name, and their new name is appearing in the match we are searching
 		return -1;
 	}
 }

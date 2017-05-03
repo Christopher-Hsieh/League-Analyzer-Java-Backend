@@ -8,23 +8,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
-
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.constant.Region;
-import net.rithms.riot.constant.Season;
-import net.rithms.riot.dto.Stats.RankedStats;
 import net.rithms.riot.dto.Summoner.Summoner;
-import com.google.gson.*;
 
 
 @Controller
 @RequestMapping("/summonerSimple")
 public class summonerController {
 
-    private static final String template = "Hello, %s!";
+    //private static final String template = "Hello, %s!";
 
     @RequestMapping(method=RequestMethod.GET)
     public @ResponseBody Summoner sayHello(@RequestParam(value="name", required=true) String name) throws RiotApiException {

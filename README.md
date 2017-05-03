@@ -30,7 +30,8 @@ com.meta.analyzer
     │	 	├── MatchItems		<= Get items based on overall match history, individual match, etc.
 ```
 
-
+## Code Improvements and Refactoring Needed
+- Champion Match History in MatchHistory is a map write now, probably better to do 2D ArrayList.
 
 ---
 ## In progress part of README

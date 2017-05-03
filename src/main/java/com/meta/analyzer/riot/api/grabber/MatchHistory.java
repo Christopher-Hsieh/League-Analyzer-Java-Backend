@@ -3,19 +3,13 @@ package com.meta.analyzer.riot.api.grabber;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
-import net.rithms.riot.dto.Match.MatchDetail;
-import net.rithms.riot.dto.Match.ParticipantIdentity;
-import net.rithms.riot.dto.Match.ParticipantStats;
 import net.rithms.riot.dto.MatchList.MatchList;
 import net.rithms.riot.dto.MatchList.MatchReference;
 import net.rithms.riot.dto.Summoner.Summoner;
@@ -29,29 +23,25 @@ public class MatchHistory {
 	@Autowired
 	RiotApi api;
 	
-	String summonerName;
-	
-	public MatchHistory(String summonerName) {
-		this.summonerName = summonerName;
-	}
-	
-	
+	private String summonerName;
+	private long summonerID;
+
 	//@PostConstruct
 	/**
 	 * 
 	 * @return Map<Champion ID, ArrayList<Match ID>>
 	 * @throws RiotApiException
 	 */
-	public Map<Long, Collection<Long>> getMatchHistory() throws RiotApiException {
-		
+	public Map<Long, Collection<Long>> getMatchHistory(String newSummonerName) throws RiotApiException {
+		this.summonerName = newSummonerName;
 		/*
 		 * Map Champion ID - > List of Match IDs
 		 * 	Map<Long, Collection<Long>>
 		 *	Map<Champion ID, ArrayList<Match ID>>
 		 */
 		Map<Long, Collection<Long>> championMatchMap = new HashMap<Long, Collection<Long>>();
-		
-		MatchList matchList = api.getMatchList(getSummoner().getId());
+		setSummonerID(getSummoner(summonerName).getId());
+		MatchList matchList = api.getMatchList(summonerID);
 		
 		for (int i =0; i < matchList.getEndIndex(); i++) {
 			// printMatchReference(matchList.getMatches().get(i));
@@ -74,12 +64,33 @@ public class MatchHistory {
 	}
 	
 	
-	// TODO make dynamic setting of name for calls
-	public Summoner getSummoner() throws RiotApiException {
+	public Summoner getSummoner(String summonerName) throws RiotApiException {
 		Summoner summoner = api.getSummonerByName(summonerName);
 		return summoner;
 	}
 	
+	
+	// Getters and Setters
+	public String getSummonerName() {
+		return summonerName;
+	}
+
+
+	public void setSummonerName(String summonerName) {
+		this.summonerName = summonerName;
+	}
+
+
+	public long getSummonerID() {
+		return summonerID;
+	}
+
+
+	public void setSummonerID(long summonerID) {
+		this.summonerID = summonerID;
+	}
+	
+	// Print functions for Debugging
 	public void printChampionMatchMap( Map<Long, Collection<Long>> championMatchMap) throws RiotApiException {
 
 		System.out.println("---- Printing HashMap ----");

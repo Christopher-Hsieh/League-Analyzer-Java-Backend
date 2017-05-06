@@ -1,8 +1,8 @@
-package com.meta.analyzer.riot.api.grabber;
+package com.meta.analyzer.riot.dto;
 
 import java.util.ArrayList;
 
-public class MatchData {
+public class MatchDataDto {
 //	{
 //	    "summonerName": {
 //	        "summonerID": "SUMMONER_ID",
@@ -40,7 +40,7 @@ public class MatchData {
 	long summonerID;
 	long championID;
 	long matchID;
-	ItemListData itemList;
+	ItemListDto itemList;
 	private long accountID;
 	
 	public String getSummonerName() {
@@ -67,10 +67,10 @@ public class MatchData {
 	public void setMatchID(long matchID) {
 		this.matchID = matchID;
 	}
-	public ItemListData getItemList() {
+	public ItemListDto getItemList() {
 		return itemList;
 	}
-	public void setItemList(ItemListData itemList) {
+	public void setItemList(ItemListDto itemList) {
 		this.itemList = itemList;
 	}
 	public void setAccountID(long accountID) {

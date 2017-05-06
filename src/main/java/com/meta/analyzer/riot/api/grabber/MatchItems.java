@@ -3,6 +3,8 @@ package com.meta.analyzer.riot.api.grabber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.meta.analyzer.riot.dto.ItemListDto;
+
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.api.endpoints.match.dto.Participant;
@@ -27,7 +29,7 @@ public class MatchItems {
 	 * getMatchItemsForSummoner(long matchId) - return item list for single match from summoner
 	 * getParticipantId(long matchId) - return summonerName's participantId for that match
 	 */
-	public ItemListData getMatchItemsForSummoner(long matchID, String summonerName) throws RiotApiException {
+	public ItemListDto getMatchItemsForSummoner(long matchID, String summonerName) throws RiotApiException {
 		//int participantID = getParticipantID(matchID, summonerName);
 		
 		
@@ -39,7 +41,7 @@ public class MatchItems {
 		}
 		ParticipantStats stats = api.getMatch(platform, matchID).getParticipantBySummonerName(summonerName).getStats();
 		//.getMatch(matchID).getParticipants().get(participantID-1).getStats();
-		return new ItemListData(stats.getItem0(), stats.getItem1(), stats.getItem2(), 
+		return new ItemListDto(stats.getItem0(), stats.getItem1(), stats.getItem2(), 
 								stats.getItem3(), stats.getItem4(), stats.getItem5(), stats.getItem6());
 	}
 	

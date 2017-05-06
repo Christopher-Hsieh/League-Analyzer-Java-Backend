@@ -1,9 +1,9 @@
-package com.meta.analyzer.elasticsearch;
+package com.meta.analyzer.aws;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.http.HttpResponseHandler;
 
-public class SimpleErrorHandler<T> implements HttpResponseHandler<T> {
+public class OldSimpleErrorHandler<T> implements HttpResponseHandler<T> {
 
     @Override
     public T handle(

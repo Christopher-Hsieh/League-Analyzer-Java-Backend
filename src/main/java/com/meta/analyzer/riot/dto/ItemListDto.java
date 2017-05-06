@@ -1,13 +1,13 @@
-package com.meta.analyzer.riot.api.grabber;
+package com.meta.analyzer.riot.dto;
 
 import java.util.ArrayList;
 
 
-public class ItemListData {
+public class ItemListDto {
 	
 	private ArrayList<Long> itemList = new ArrayList<>();
 	
-	public ItemListData(
+	public ItemListDto(
 			long item0, long item1, long item2, 
 			long item3, long item4, long item5, long item6){
 		

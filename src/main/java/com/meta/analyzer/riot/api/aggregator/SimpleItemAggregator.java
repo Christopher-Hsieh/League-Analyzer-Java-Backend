@@ -9,10 +9,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.meta.analyzer.riot.api.grabber.ItemListData;
-import com.meta.analyzer.riot.api.grabber.MatchData;
 import com.meta.analyzer.riot.api.grabber.MatchHistory;
 import com.meta.analyzer.riot.api.grabber.MatchItems;
+import com.meta.analyzer.riot.dto.ItemListDto;
+import com.meta.analyzer.riot.dto.MatchDataDto;
 
 import net.rithms.riot.api.RiotApiException;
 
@@ -41,7 +41,7 @@ public class SimpleItemAggregator {
 		 * (MatchData)String summonerName; => Input to function 
 		 * (MatchData)long summonerID; => MatchHistory.getSummonerId()
 		 */
-		MatchData matchData = new MatchData();
+		MatchDataDto matchData = new MatchDataDto();
 		matchData.setSummonerName(summonerName);
 		Map<Long, Collection<Long>> championMatchMap = null;
 		championMatchMap = matchHistory.getMatchHistory(summonerName);
@@ -66,7 +66,7 @@ public class SimpleItemAggregator {
 		for (long championID : championMatchMap.keySet()) {
 				ArrayList<Long> matchIdList = (ArrayList<Long>) championMatchMap.get(championID);
 				for (long matchID : matchIdList) {
-					ItemListData itemListData = matchItems.getMatchItemsForSummoner(matchID, summonerName);
+					ItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, summonerName);
 					try {
 						Thread.sleep(4000);
 					} catch (InterruptedException e) {

@@ -1,4 +1,4 @@
-package com.meta.analyzer.elasticsearch;
+package com.meta.analyzer.aws;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,7 +7,7 @@ import com.amazonaws.AmazonWebServiceResponse;
 import com.amazonaws.http.HttpResponseHandler;
 import com.amazonaws.util.IOUtils;
 
-public class SimpleHttpResponseHandler<T> implements HttpResponseHandler<AmazonWebServiceResponse<T>> {
+public class OldSimpleHttpResponseHandler<T> implements HttpResponseHandler<AmazonWebServiceResponse<T>> {
 
     @Override
     public AmazonWebServiceResponse<T> handle(

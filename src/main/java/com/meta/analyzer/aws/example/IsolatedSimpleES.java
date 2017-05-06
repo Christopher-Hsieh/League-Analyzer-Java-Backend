@@ -1,4 +1,4 @@
-package com.meta.analyzer.elasticsearch;
+package com.meta.analyzer.aws.example;
 
 import java.io.ByteArrayInputStream;
 import java.net.URI;
@@ -20,9 +20,11 @@ import com.amazonaws.http.AmazonHttpClient.RequestExecutionBuilder;
 import com.amazonaws.http.ExecutionContext;
 import com.amazonaws.http.HttpMethodName;
 import com.meta.analyzer.ApplicationProperties;
+import com.meta.analyzer.aws.OldSimpleErrorHandler;
+import com.meta.analyzer.aws.OldSimpleHttpResponseHandler;
 
 @Component
-public class SimpleES {
+public class IsolatedSimpleES {
 	@Autowired
 	ApplicationProperties applicationProperties;
 	
@@ -67,8 +69,8 @@ public class SimpleES {
 	       AmazonHttpClient client = new AmazonHttpClient(clientConfiguration);
 	       
 	       // Initialize our handlers
-	       SimpleHttpResponseHandler<?> responseHandler = new SimpleHttpResponseHandler<Void>();
-	       SimpleErrorHandler<? extends SdkBaseException> errorHandler = new SimpleErrorHandler<>();
+	       OldSimpleHttpResponseHandler<?> responseHandler = new OldSimpleHttpResponseHandler<Void>();
+	       OldSimpleErrorHandler<? extends SdkBaseException> errorHandler = new OldSimpleErrorHandler<>();
 	       
 	       // Build and execute our request
 	       RequestExecutionBuilder requestBuilder = client.requestExecutionBuilder();

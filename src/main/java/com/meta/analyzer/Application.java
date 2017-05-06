@@ -27,6 +27,7 @@ public class Application {
 	public ApiConfig apiConfig(){
 		ApiConfig apiConfig = new ApiConfig();
 		apiConfig.setKey(applicationProperties.getApiKey());
+		apiConfig.setRespectRateLimit(true);
 		return apiConfig;
 	}
 	

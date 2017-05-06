@@ -1,6 +1,8 @@
 package com.meta.analyzer.riot.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MatchDataDto {
 //	{
@@ -40,9 +42,15 @@ public class MatchDataDto {
 	long summonerID;
 	long championID;
 	long matchID;
-	ItemListDto itemList;
-	private long accountID;
+	long accountID;
+	private ItemListDto itemList;
 	
+	Map<String,Long> itemMap = new HashMap<String,Long>();
+	
+	
+	public Map<String, Long> getItemMap() {
+		return itemMap;
+	}
 	public String getSummonerName() {
 		return summonerName;
 	}
@@ -67,17 +75,26 @@ public class MatchDataDto {
 	public void setMatchID(long matchID) {
 		this.matchID = matchID;
 	}
-	public ItemListDto getItemList() {
+	private ItemListDto getItemList() {
 		return itemList;
 	}
+	
 	public void setItemList(ItemListDto itemList) {
 		this.itemList = itemList;
+		itemMap.clear();
+		itemMap.put("item0", itemList.getItemList().get(0));
+		itemMap.put("item1", itemList.getItemList().get(1));
+		itemMap.put("item2", itemList.getItemList().get(2));
+		itemMap.put("item3", itemList.getItemList().get(3));
+		itemMap.put("item4", itemList.getItemList().get(4));
+		itemMap.put("item5", itemList.getItemList().get(5));
+		itemMap.put("item6", itemList.getItemList().get(6));
 	}
 	public void setAccountID(long accountID) {
 		this.accountID = accountID;
 	}
 	
-	private long getAccountID() {
+	public long getAccountID() {
 		return accountID;
 	}
 	

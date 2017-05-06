@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Request;
@@ -22,55 +23,40 @@ import com.meta.analyzer.aws.request.AwsPost;
 import com.meta.analyzer.aws.request.EsHttpRequest;
 import com.meta.analyzer.aws.request.SignedRequest;
 
+@Component
 public class StoreMatchData {
 
 	@Autowired
 	ApplicationProperties applicationProperties;
 	
-
+	
     /**
      * Json payload we're about to 
-     */
-    //private SearchQuery query;
-	private String matchDataJson = "Payload ready to be turned into JSON";
-
-    /**
-     * Index to search into.
-     */
-    private String indexName;
-
-    /**
-     * Ctor.
-     * @param qry
-     * @param idxName
-     */
-//    public AmazonEsSearch(SearchQuery qry, String idxName) {
-//        this.query = qry;
-//        this.indexName = idxName;
-//    }
-
-    /**
+     * String jsonString
+     *
      * Perform a search query.
+     * @return 
      * @return
      */
  
-	public void search() {
+	public HttpResponse postMatchData(String jsonString, String idxName) {
     	Map<String, String> headers = new HashMap<String, String>();
     	headers.put("Content-Type", "application/json");
-    	AwsHttpRequest<HttpResponse> search =
+    	AwsHttpRequest<HttpResponse> response =
     	    new SignedRequest<>(
     	        new AwsHttpHeaders<>(
     	            new AwsPost<>(
     	                new EsHttpRequest<>(
-    	            	    this.indexName + "/_search",
-    	            	    new SimpleAwsResponseHandler(false), new SimpleAwsErrorHandler(false)
+    	            	    idxName, //+ "/_search",
+    	            	    new SimpleAwsResponseHandler(false), 
+    	            	    new SimpleAwsErrorHandler(false),
+    	            	    applicationProperties
     	                ),
     	               // new ByteArrayInputStream(this.query.toJson().toString().getBytes())
-    	                new ByteArrayInputStream(this.matchDataJson.getBytes())
+    	                new ByteArrayInputStream(jsonString.getBytes())
     	            ), headers
-    	        )
+    	        ), applicationProperties
     	    );
-        search.getOutput();
-        return;
+        return response.getOutput(); 
     }
 }

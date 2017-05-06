@@ -33,7 +33,13 @@ import com.amazonaws.Response;
 import com.amazonaws.http.AmazonHttpClient;
 import com.amazonaws.http.ExecutionContext;
 import com.amazonaws.http.HttpResponseHandler;
+import com.amazonaws.http.AmazonHttpClient.RequestExecutionBuilder;
+import com.meta.analyzer.ApplicationProperties;
+
 import java.net.URI;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Base HTTP request sent to Amazon ES service using the aws-java-sdk.
@@ -42,8 +48,9 @@ import java.net.URI;
  * @since 1.0.0
  *
  */
-public final class EsHttpRequest<T> extends AwsHttpRequest<T> {
 
+public final class EsHttpRequest<T> extends AwsHttpRequest<T> {
+	
     /**
      * Base request.
      */
@@ -68,10 +75,11 @@ public final class EsHttpRequest<T> extends AwsHttpRequest<T> {
     public EsHttpRequest(
         String uri,
         HttpResponseHandler<T> respHandler,
-        HttpResponseHandler<AmazonServiceException> errHandler
+        HttpResponseHandler<AmazonServiceException> errHandler,
+        ApplicationProperties applicationProperties
     ){
-    	this.request = new DefaultRequest<Void>("es");
-        String esEndpoint = System.getProperty("aws.es.endpoint");
+    	this.request = new DefaultRequest<Void>(applicationProperties.getEsServiceName());
+        String esEndpoint = applicationProperties.getEsEndpoint();
         if(esEndpoint == null || esEndpoint.isEmpty()) {
             throw new IllegalStateException("ElasticSearch endpoint needs to be specified!");
         }
@@ -98,6 +106,7 @@ public final class EsHttpRequest<T> extends AwsHttpRequest<T> {
             .request(this.request)
             .errorResponseHandler(this.errHandler)
             .execute(this.respHandler);
+        
         return rsp.getAwsResponse();
     }
 

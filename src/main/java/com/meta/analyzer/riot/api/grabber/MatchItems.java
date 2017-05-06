@@ -29,20 +29,31 @@ public class MatchItems {
 	 * getMatchItemsForSummoner(long matchId) - return item list for single match from summoner
 	 * getParticipantId(long matchId) - return summonerName's participantId for that match
 	 */
-	public ItemListDto getMatchItemsForSummoner(long matchID, String summonerName) throws RiotApiException {
-		//int participantID = getParticipantID(matchID, summonerName);
-		
-		
+	public ItemListDto getMatchItemsForSummoner(long matchID, long accountID) {
 
-		Participant participant = api.getMatch(platform, matchID).getParticipantBySummonerName(summonerName);
-		// Name change maybe, handle it
-		if (participant == null) {
-			return null;
-		}
-		ParticipantStats stats = api.getMatch(platform, matchID).getParticipantBySummonerName(summonerName).getStats();
-		//.getMatch(matchID).getParticipants().get(participantID-1).getStats();
+		ParticipantStats stats = retryOnFailureParticipantStats(matchID, accountID);
 		return new ItemListDto(stats.getItem0(), stats.getItem1(), stats.getItem2(), 
 								stats.getItem3(), stats.getItem4(), stats.getItem5(), stats.getItem6());
+	}
+	
+
+	public ParticipantStats retryOnFailureParticipantStats(long matchID, long accountID) {
+		int retryCount = 0;
+		while (retryCount  < 5) {
+			try {
+				retryCount++;
+				return api.getMatch(platform, matchID).getParticipantByAccountId(accountID).getStats();
+			} catch (RiotApiException e) {
+				System.out.println("Attempt: " + retryCount + " ErrorCode: " + e.getErrorCode() + " Message: " + e.getMessage());
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		return null;	
 	}
 	
 	public void getItems(long matchId, int participantID) throws RiotApiException {

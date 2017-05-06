@@ -1,5 +1,6 @@
 package com.meta.analyzer.riot.api.aggregator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -9,6 +10,12 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.amazonaws.http.HttpResponse;
+import com.amazonaws.util.IOUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.meta.analyzer.aws.StoreMatchData;
 import com.meta.analyzer.riot.api.grabber.MatchHistory;
 import com.meta.analyzer.riot.api.grabber.MatchItems;
 import com.meta.analyzer.riot.dto.ItemListDto;
@@ -30,9 +37,13 @@ public class SimpleItemAggregator {
 	@Autowired
 	MatchItems matchItems;
 
+	@Autowired
+	StoreMatchData storeMatchData;
+	
 	@PostConstruct
 	public void testSetMatchData() throws RiotApiException {
 		setMatchData("firebun");
+		//storeMatchData.postMatchData("{\"field\":\"fieldValue\"}","index/id");
 	}
 	
 	public void setMatchData(String summonerName) throws RiotApiException {
@@ -62,13 +73,17 @@ public class SimpleItemAggregator {
 			System.out.println("No Champions found in match History!");
 			return;
 		}
-		
+		int currentMatch = 0;
+		int totalMatches = matchHistory.getTotalMatches();
+		int foundMatches = 0;
 		for (long championID : championMatchMap.keySet()) {
 				ArrayList<Long> matchIdList = (ArrayList<Long>) championMatchMap.get(championID);
 				for (long matchID : matchIdList) {
-					ItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, summonerName);
+					currentMatch++;
+					System.out.println("Match " + currentMatch + "/" + totalMatches);
+					ItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, matchHistory.getAccountID());
 					try {
-						Thread.sleep(4000);
+						Thread.sleep(3000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -77,7 +92,25 @@ public class SimpleItemAggregator {
 						matchData.setChampionID(championID);
 						matchData.setMatchID(matchID);
 						matchData.setItemList(itemListData);
-						matchData.printMatchData();
+						//matchData.printMatchData();
+						ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+						try {
+							String json = ow.writeValueAsString(matchData);
+							HttpResponse response = storeMatchData.postMatchData(json, "summoners/summoner");
+							System.out.println("Status Code: " + response.getStatusCode() + 
+												" | Status Text: " + response.getStatusText() +
+												" | Found Matches: " + ++foundMatches);
+//							try {
+//								System.out.println("Response Content: " + IOUtils.toString(response.getContent()));
+//							} catch (IOException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+							System.out.println(json);
+						} catch (JsonProcessingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 		}

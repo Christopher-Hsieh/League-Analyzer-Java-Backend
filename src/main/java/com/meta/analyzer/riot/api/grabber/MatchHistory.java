@@ -28,6 +28,7 @@ public class MatchHistory {
 	private long summonerID;
 	private long accountID;
 	private Platform platform = Platform.NA;
+	int totalMatches;
 
 	//@PostConstruct
 	/**
@@ -61,7 +62,7 @@ public class MatchHistory {
 			
 			e.printStackTrace();
 		}
-		
+		this.totalMatches = matchList.getTotalGames();
 		for (int i =0; i < matchList.getEndIndex(); i++) {
 			// printMatchReference(matchList.getMatches().get(i));
 			long matchId = matchList.getMatches().get(i).getGameId(); //.getMatchId();
@@ -88,7 +89,9 @@ public class MatchHistory {
 		return summoner;
 	}
 	
-	
+	public int getTotalMatches() {
+		return totalMatches;
+	}
 	// Getters and Setters
 	public String getSummonerName() {
 		return summonerName;

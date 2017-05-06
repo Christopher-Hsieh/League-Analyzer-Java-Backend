@@ -25,9 +25,13 @@
  */
 package com.meta.analyzer.aws.request;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.amazonaws.Request;
 import com.amazonaws.auth.AWS4Signer;
 import com.amazonaws.auth.AWSCredentials;
+import com.meta.analyzer.ApplicationProperties;
 
 /**
  * A signed request made to AWS.
@@ -40,7 +44,9 @@ import com.amazonaws.auth.AWSCredentials;
  *
  */
 public class SignedRequest<T> extends AwsHttpRequest<T> {
-
+	
+	private ApplicationProperties applicationProperties;
+	
     /**
      * Base request.
      */
@@ -50,14 +56,15 @@ public class SignedRequest<T> extends AwsHttpRequest<T> {
      * Ctor.
      * @param req Request to sign.
      */
-    public SignedRequest(AwsHttpRequest<T> req) {
+    public SignedRequest(AwsHttpRequest<T> req, ApplicationProperties applicationProperties) {
         this.base = req;
+        this.applicationProperties = applicationProperties;
     }
 
     @Override
     public T getOutput() {
         AWS4Signer signer = new AWS4Signer();
-        String region = System.getProperty("aws.es.region");
+        String region = applicationProperties.getEsRegion();
         if(region == null || region.isEmpty()) {
             throw new IllegalStateException("Mandatory sys property aws.es.region not specified!");
         }
@@ -75,11 +82,11 @@ public class SignedRequest<T> extends AwsHttpRequest<T> {
     /**
      * AWS credentials (aws access key id and aws secret key from the system properties).
      */
-    private static class AwsCredentialsFromSystem implements AWSCredentials {
+    private class AwsCredentialsFromSystem implements AWSCredentials {
 
         @Override
         public String getAWSAccessKeyId() {
-            String accessKeyId = System.getProperty("aws.accessKeyId");
+            String accessKeyId = applicationProperties.getAwsAccessKey();
             if(accessKeyId == null || accessKeyId.isEmpty()) {
                 throw new IllegalStateException("Mandatory sys property aws.accessKeyId not specified!");
             }
@@ -88,7 +95,7 @@ public class SignedRequest<T> extends AwsHttpRequest<T> {
 
         @Override
         public String getAWSSecretKey() {
-            String secretKey = System.getProperty("aws.secretKey");
+            String secretKey = applicationProperties.getAwsSecretKey();
             if(secretKey == null || secretKey.isEmpty()) {
                 throw new IllegalStateException("Mandatory sys property aws.secretKey not specified!");
             }

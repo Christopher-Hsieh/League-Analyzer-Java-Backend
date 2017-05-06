@@ -1,12 +1,14 @@
 package com.meta.analyzer.riot.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ItemListDto {
 	
 	private ArrayList<Long> itemList = new ArrayList<>();
-	
+
 	public ItemListDto(
 			long item0, long item1, long item2, 
 			long item3, long item4, long item5, long item6){
@@ -19,7 +21,12 @@ public class ItemListDto {
 		itemList.add(item5);
 		itemList.add(item6);
 		
+
 	}
+
+		
+		
+
 	
 	public ArrayList<Long> getItemList(){
 		return this.itemList;

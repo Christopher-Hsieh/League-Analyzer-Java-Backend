@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
+import net.rithms.riot.api.ApiConfig;
 import net.rithms.riot.api.RiotApi;
-import net.rithms.riot.constant.Region;
 
 
 @SpringBootApplication
@@ -24,10 +24,15 @@ public class Application {
 	ApplicationProperties applicationProperties;
 	
 	@Bean
+	public ApiConfig apiConfig(){
+		ApiConfig apiConfig = new ApiConfig();
+		apiConfig.setKey(applicationProperties.getApiKey());
+		return apiConfig;
+	}
+	
+	@Bean
 	public RiotApi createApi() {
-		RiotApi api = new RiotApi(applicationProperties.getApiKey(), Region.NA);
-		api.setRegion(Region.NA);
-		return api;
+		return new RiotApi(apiConfig());
 	}
 
 }

@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
-import net.rithms.riot.dto.MatchList.MatchList;
-import net.rithms.riot.dto.MatchList.MatchReference;
-import net.rithms.riot.dto.Summoner.Summoner;
+import net.rithms.riot.api.endpoints.match.dto.MatchList;
+import net.rithms.riot.api.endpoints.match.dto.MatchReference;
+import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
+import net.rithms.riot.constant.Platform;
 
 /*
  * Class for making calls to Riot Api for match history and match info
@@ -25,6 +26,8 @@ public class MatchHistory {
 	
 	private String summonerName;
 	private long summonerID;
+	private long accountID;
+	private Platform platform = Platform.NA;
 
 	//@PostConstruct
 	/**
@@ -32,7 +35,7 @@ public class MatchHistory {
 	 * @return Map<Champion ID, ArrayList<Match ID>>
 	 * @throws RiotApiException
 	 */
-	public Map<Long, Collection<Long>> getMatchHistory(String newSummonerName) throws RiotApiException {
+	public Map<Long, Collection<Long>> getMatchHistory(String newSummonerName)  {
 		this.summonerName = newSummonerName;
 		/*
 		 * Map Champion ID - > List of Match IDs
@@ -40,12 +43,28 @@ public class MatchHistory {
 		 *	Map<Champion ID, ArrayList<Match ID>>
 		 */
 		Map<Long, Collection<Long>> championMatchMap = new HashMap<Long, Collection<Long>>();
-		setSummonerID(getSummoner(summonerName).getId());
-		MatchList matchList = api.getMatchList(summonerID);
+		
+		try {
+			setSummonerID(getSummoner(summonerName).getId());
+			setAccountID(getSummoner(summonerName).getAccountId());
+		} catch (RiotApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		MatchList matchList = null;
+		try {
+			matchList = api.getMatchListByAccountId(platform, accountID);
+		} catch (RiotApiException e) {
+			System.out.println("Error Encountered grabbing Champion Match Map in MatchHistory.getMatchHistory()\n" 
+					+e.getMessage()+"\n");
+			
+			e.printStackTrace();
+		}
 		
 		for (int i =0; i < matchList.getEndIndex(); i++) {
 			// printMatchReference(matchList.getMatches().get(i));
-			long matchId = matchList.getMatches().get(i).getMatchId();
+			long matchId = matchList.getMatches().get(i).getGameId(); //.getMatchId();
 			long championId = matchList.getMatches().get(i).getChampion();
 			//System.out.println("Key: " + championId);
 			
@@ -62,10 +81,10 @@ public class MatchHistory {
 		// printChampionMatchMap(championMatchMap);
 		return championMatchMap;
 	}
-	
-	
+
+
 	public Summoner getSummoner(String summonerName) throws RiotApiException {
-		Summoner summoner = api.getSummonerByName(summonerName);
+		Summoner summoner = api.getSummonerByName(platform, summonerName);
 		return summoner;
 	}
 	
@@ -75,9 +94,16 @@ public class MatchHistory {
 		return summonerName;
 	}
 
-
 	public void setSummonerName(String summonerName) {
 		this.summonerName = summonerName;
+	}
+	
+	private void setAccountID(long accountID) {
+		this.accountID = accountID;
+	}
+	
+	public long getAccountID() {
+		return accountID;
 	}
 
 
@@ -107,7 +133,7 @@ public class MatchHistory {
 	}
 	
 	public void printMatchReference(MatchReference reference) {
-		System.out.println("Match ID:" + reference.getMatchId());
+		//System.out.println("Match ID:" + reference.getMatchId());
 		System.out.println("TimeStamp:" + reference.getTimestamp());
 		System.out.println("Champion:" + reference.getChampion());
 		System.out.println("Lane:" + reference.getLane());
@@ -116,4 +142,5 @@ public class MatchHistory {
 		System.out.println("Role:" + reference.getRole());
 		System.out.println("Season:" + reference.getSeason());
 	}
+
 }

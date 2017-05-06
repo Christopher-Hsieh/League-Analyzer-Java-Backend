@@ -44,13 +44,9 @@ public class SimpleItemAggregator {
 		MatchData matchData = new MatchData();
 		matchData.setSummonerName(summonerName);
 		Map<Long, Collection<Long>> championMatchMap = null;
-		try {
-			championMatchMap = matchHistory.getMatchHistory(summonerName);
-			matchData.setSummonerID(matchHistory.getSummonerID());
-		} catch (RiotApiException e) {
-			System.out.println("Error Encountered grabbing Champion Match Map in MatchHistory.getMatchHistory()");
-			e.printStackTrace();
-		}
+		championMatchMap = matchHistory.getMatchHistory(summonerName);
+		matchData.setSummonerID(matchHistory.getSummonerID());
+		matchData.setAccountID(matchHistory.getAccountID());
 		/*
 		 * for ( All ChampionIDs in Map<Champion ID, ArrayList<Match ID>>) {
 		 * 		getMatchItemsForSummoner(long matchId) - return item list for single match from summoner 

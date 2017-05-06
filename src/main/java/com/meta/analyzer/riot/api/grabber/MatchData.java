@@ -24,6 +24,7 @@ public class MatchData {
 	public void printMatchData() {
 		System.out.println("Summoner Name: " + getSummonerName());
 		System.out.println("Summoner ID: " + getSummonerID());
+		System.out.println("Account ID: " + getAccountID());
 		System.out.println("Champion ID: " + getChampionID());
 		System.out.println("Match ID: " + getMatchID());
 		
@@ -34,11 +35,13 @@ public class MatchData {
 		}
 	}
 	
+
 	String summonerName;
 	long summonerID;
 	long championID;
 	long matchID;
 	ItemListData itemList;
+	private long accountID;
 	
 	public String getSummonerName() {
 		return summonerName;
@@ -69,6 +72,13 @@ public class MatchData {
 	}
 	public void setItemList(ItemListData itemList) {
 		this.itemList = itemList;
+	}
+	public void setAccountID(long accountID) {
+		this.accountID = accountID;
+	}
+	
+	private long getAccountID() {
+		return accountID;
 	}
 	
 	

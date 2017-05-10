@@ -40,7 +40,7 @@ public class SimpleItemAggregator {
 	@Autowired
 	StoreMatchData storeMatchData;
 	
-	@PostConstruct
+	//@PostConstruct
 	public void testSetMatchData() throws RiotApiException {
 		setMatchData("firebun");
 		//storeMatchData.postMatchData("{\"field\":\"fieldValue\"}","index/id");

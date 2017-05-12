@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationProperties {
 
+	@Value ("${get.only.most.played.champion}")
+	private Boolean getOnlyMostPlayedChampion;	
+
 	@Value ("${riot.api.key}")
 	private String apiKey;
 	
@@ -24,6 +27,10 @@ public class ApplicationProperties {
 	@Value ("${es.service.name}")
 	private String esServiceName;
 	
+	public Boolean getGetOnlyMostPlayedChampion() {
+		return getOnlyMostPlayedChampion;
+	}
+
 	public String getEsEndpoint() {
 		return esEndpoint;
 	}

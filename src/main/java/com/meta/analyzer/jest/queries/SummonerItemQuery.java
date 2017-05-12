@@ -1,37 +1,21 @@
 package com.meta.analyzer.jest.queries;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.annotation.PostConstruct;
-
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.meta.analyzer.jest.client.JestClientCreator;
-import com.meta.analyzer.jest.dto.ExtractedChampionItemCountDto;
-import com.meta.analyzer.jest.dto.ExtractedItemTotalsDto;
-
-import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
-import io.searchbox.core.SearchResult;
 import io.searchbox.core.search.aggregation.TermsAggregation;
 import io.searchbox.params.Parameters;
 
-public class SummonerItemQueries {
+public class SummonerItemQuery {
 	
 	
-	private static final int DOC_BOUND_SIZE = 200;
+	private static final int DOC_BOUND_SIZE = 20000;
 	
-	public static Search getChampionItemsSearch() {
-		String summonerName = "firebun";
+	public static Search getChampionItemsSearch(String summonerName) {
+
 		String index = "summoners";
 		String type = "summoner";
 		

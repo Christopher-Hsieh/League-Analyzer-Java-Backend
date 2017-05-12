@@ -8,6 +8,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.meta.analyzer.jest.PullMatchIds;
+
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.api.endpoints.match.dto.MatchList;
@@ -19,10 +21,13 @@ import net.rithms.riot.constant.Platform;
  * Class for making calls to Riot Api for match history and match info
  */
 @Component
-public class MatchHistory {
+public class GetMatchHistory {
 	
 	@Autowired
 	RiotApi api;
+	
+	@Autowired
+	PullMatchIds pullMatchIds;
 	
 	private String summonerName;
 	private long summonerID;
@@ -63,20 +68,26 @@ public class MatchHistory {
 			e.printStackTrace();
 		}
 		this.totalMatches = matchList.getTotalGames();
+		
+		ArrayList<Long> storedMatchIds = pullMatchIds.pull(summonerName);
+		
 		for (int i =0; i < matchList.getEndIndex(); i++) {
-			// printMatchReference(matchList.getMatches().get(i));
-			long matchId = matchList.getMatches().get(i).getGameId(); //.getMatchId();
-			long championId = matchList.getMatches().get(i).getChampion();
-			//System.out.println("Key: " + championId);
+			//Check if matchId is in elastic search already for this summoner
 			
-			if (championMatchMap.containsKey(championId)) {
-				// Key exist, just add to arrayList
-				championMatchMap.get(championId).add(matchId);
-			}
-			else {
-				// Key not present. Create arrayList and add to it.
-				championMatchMap.put(championId, new ArrayList<Long>());
-				championMatchMap.get(championId).add(matchId);
+			long matchId = matchList.getMatches().get(i).getGameId();
+			
+			if (storedMatchIds.contains(matchId) == false) {
+				long championId = matchList.getMatches().get(i).getChampion();
+
+				if (championMatchMap.containsKey(championId)) {
+					// Key exist, just add to arrayList
+					championMatchMap.get(championId).add(matchId);
+				}
+				else {
+					// Key not present. Create arrayList and add to it.
+					championMatchMap.put(championId, new ArrayList<Long>());
+					championMatchMap.get(championId).add(matchId);
+				}
 			}
 		}
 		// printChampionMatchMap(championMatchMap);

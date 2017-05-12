@@ -7,13 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Request;
-import com.amazonaws.SdkBaseException;
-import com.amazonaws.http.AmazonHttpClient;
-import com.amazonaws.http.ExecutionContext;
 import com.amazonaws.http.HttpResponse;
-import com.amazonaws.http.AmazonHttpClient.RequestExecutionBuilder;
 import com.meta.analyzer.ApplicationProperties;
 import com.meta.analyzer.rest.aws.handlers.SimpleAwsErrorHandler;
 import com.meta.analyzer.rest.aws.handlers.SimpleAwsResponseHandler;
@@ -24,7 +18,7 @@ import com.meta.analyzer.rest.aws.request.EsHttpRequest;
 import com.meta.analyzer.rest.aws.request.SignedRequest;
 
 @Component
-public class StoreMatchData {
+public class SimpleESPost {
 
 	@Autowired
 	ApplicationProperties applicationProperties;
@@ -39,7 +33,7 @@ public class StoreMatchData {
      * @return
      */
  
-	public HttpResponse postMatchData(String jsonString, String idxName) {
+	public HttpResponse post(String jsonString, String idxName) {
     	Map<String, String> headers = new HashMap<String, String>();
     	headers.put("Content-Type", "application/json");
     	AwsHttpRequest<HttpResponse> response =

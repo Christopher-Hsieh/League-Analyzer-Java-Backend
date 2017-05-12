@@ -1,5 +1,8 @@
 package com.meta.analyzer;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +25,12 @@ public class Application {
 	
 	@Autowired
 	ApplicationProperties applicationProperties;
+
+	@Bean
+	public Queue<String> incomingSummonerQueue() {
+		Queue<String> incomingSummonerQueue = new LinkedList<String>();
+		return incomingSummonerQueue;
+	}
 	
 	@Bean
 	public ApiConfig apiConfig(){

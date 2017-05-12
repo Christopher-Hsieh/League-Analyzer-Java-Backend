@@ -1,14 +1,19 @@
 package com.meta.analyzer.controllers.simpleController;
 
-import java.util.Map;
+import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.rithms.riot.api.RiotApi;
+import com.meta.analyzer.jest.AggregateSummonerChampionsAndItems;
+import com.meta.analyzer.jest.dto.ExtractedChampionItemCountDto;
+import com.meta.analyzer.jest.dto.ExtractedItemTotalsDto;
+import com.meta.analyzer.riot.api.aggregator.SimpleItemAggregator;
+
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 
@@ -16,23 +21,26 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 @Controller
 @RequestMapping("/summonerSimple")
 public class summonerController {
-
-    //private static final String template = "Hello, %s!";
+	
+	@Autowired
+	SimpleItemAggregator simpleItemAggregator;
+    
+	@Autowired
+	AggregateSummonerChampionsAndItems aggregateSummonerChampionsAndItems;
 
     @RequestMapping(method=RequestMethod.GET)
-    public @ResponseBody Summoner sayHello(@RequestParam(value="name", required=true) String name) throws RiotApiException {
+    public @ResponseBody Summoner sayHello(@RequestParam(value="name", required=true) String summonerName) throws RiotApiException {
+    	// Make sure match history is as up to date as possible
+    	simpleItemAggregator.pullAndStoreSummonerData(summonerName);
     	
-    	// MUST UPDATE USING NEW WRAPPER CURRENT CODE: v3.8.2 NEW SHOULD BE >v3.9.0
-//		RiotApi api = new RiotApi("RGAPI-a22eb6a6-8081-451a-941a-0b7cda5374a3", Region.NA);
-//		api.setRegion(Region.NA);
-//		Map<String, Summoner> summoners = api.getSummonersByName(name);
-//		Summoner summoner = summoners.get(name);
-//		long id = summoner.getId();
-//		System.out.println(id);
-		
-    	
-    	
-        //return summoner;
+    	// Aggregate their matches!
+    	ArrayList<ExtractedChampionItemCountDto> championItemCountList = aggregateSummonerChampionsAndItems.extractChampionsAndItems(summonerName);
+    	ExtractedChampionItemCountDto championItemCount = championItemCountList.get(0);
+    	championItemCount.getChampionId();
+    	championItemCount.getGamesPlayedAsChampion();
+    	ArrayList<ExtractedItemTotalsDto> itemTotalsList = championItemCount.getItemTotalsList();
+    	itemTotalsList.get(0).getItemCount();
+    	itemTotalsList.get(0).getItemId();
     	return null;
     }
     

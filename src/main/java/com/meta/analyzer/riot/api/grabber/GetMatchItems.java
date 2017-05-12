@@ -7,7 +7,6 @@ import com.meta.analyzer.riot.dto.RetrievedItemListDto;
 
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
-import net.rithms.riot.api.endpoints.match.dto.Participant;
 import net.rithms.riot.api.endpoints.match.dto.ParticipantStats;
 import net.rithms.riot.constant.Platform;
 
@@ -18,7 +17,7 @@ import net.rithms.riot.constant.Platform;
  * OUTPUT: aggregate of all items to champion Ids
  */
 @Component
-public class MatchItems {
+public class GetMatchItems {
 
 	@Autowired
 	RiotApi api;
@@ -44,6 +43,7 @@ public class MatchItems {
 				retryCount++;
 				return api.getMatch(platform, matchID).getParticipantByAccountId(accountID).getStats();
 			} catch (RiotApiException e) {
+				e.getErrorCode();
 				System.out.println("Attempt: " + retryCount + " ErrorCode: " + e.getErrorCode() + " Message: " + e.getMessage());
 				try {
 					Thread.sleep(5000);

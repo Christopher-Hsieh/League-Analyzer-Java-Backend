@@ -3,10 +3,8 @@ package com.meta.analyzer.jest;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,21 +12,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meta.analyzer.jest.client.JestClientCreator;
 import com.meta.analyzer.jest.dto.ExtractedChampionItemCountDto;
 import com.meta.analyzer.jest.dto.ExtractedItemTotalsDto;
-import com.meta.analyzer.jest.queries.SummonerItemQueries;
+import com.meta.analyzer.jest.queries.SummonerItemQuery;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-@Component
+@Service
 public class AggregateSummonerChampionsAndItems {
 	
 	@ Autowired
 	JestClientCreator clientCreator;
 	
-	@PostConstruct
-	public void extractChampionsAndItems() {
-		Search search = SummonerItemQueries.getChampionItemsSearch();
+	public ArrayList<ExtractedChampionItemCountDto> extractChampionsAndItems(String summonerName) {
+		Search search = SummonerItemQuery.getChampionItemsSearch(summonerName);
 		
 	    JestClient client = clientCreator.getJestClient();
 	    SearchResult result = null;
@@ -56,6 +53,7 @@ public class AggregateSummonerChampionsAndItems {
 		
 	    JsonNode championNodes = jsonNodeRoot.get("aggregations").get("terms").withArray("buckets");
 	    ArrayList<ExtractedChampionItemCountDto> extractedChampionItemCounts = extractChampionItemsNodes(championNodes);
+	    return extractedChampionItemCounts;
 	}
 	
 	/*

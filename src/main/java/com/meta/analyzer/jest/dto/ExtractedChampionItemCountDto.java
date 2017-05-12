@@ -22,4 +22,9 @@ public class ExtractedChampionItemCountDto {
 	public int getGamesPlayedAsChampion() {
 		return gamesPlayed;
 	}
+	
+	public ArrayList<ExtractedItemTotalsDto> getItemTotalsList() {
+		return itemTotalsList;
+	}
+
 }

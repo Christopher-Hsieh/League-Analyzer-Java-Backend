@@ -23,44 +23,58 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.meta.analyzer.aws.handlers;
+package com.meta.analyzer.rest.aws.request;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.http.HttpResponse;
-import com.amazonaws.http.HttpResponseHandler;
+import java.net.URI;
+
+import com.amazonaws.DefaultRequest;
+import com.amazonaws.Request;
 
 /**
- * Simple exception handler that returns an {@link AmazonServiceException}
- * containing the HTTP status code and status text.
+ * Http request sent to AWS.
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 1.0.0
+ *
  */
-public class SimpleAwsErrorHandler implements HttpResponseHandler<AmazonServiceException> {
+public abstract class AwsHttpRequest<T> {
 
     /**
-     * See {@link HttpResponseHandler}, method needsConnectionLeftOpen()
+     * Perform this request.
      */
-    private boolean needsConnectionLeftOpen;
+    public abstract T getOutput();
 
     /**
-     * Ctor.
-     * @param connectionLeftOpen Should the connection be closed immediately or not?
+     * Get the aws base request.
+     * @return Request.
      */
-    public SimpleAwsErrorHandler(boolean connectionLeftOpen) {
-        this.needsConnectionLeftOpen = connectionLeftOpen;
-    }
+    abstract Request<Void> request();
 
-    @Override
-    public AmazonServiceException handle(HttpResponse response) {
-        AmazonServiceException ase = new AmazonServiceException(response.getStatusText());
-        ase.setStatusCode(response.getStatusCode());
-        return ase;
-    }
+    /**
+     * Fake AwsHttpRequest for unit testing.
+     * @author Mihai Andronache (amihaiemil@gmail.com)
+     * @version $Id$
+     * @since 1.0.0
+     */
+    static class FakeAwsHttpRequest extends AwsHttpRequest<String>{
 
-    @Override
-    public boolean needsConnectionLeftOpen() {
-        return this.needsConnectionLeftOpen;
-    }
+        private Request<Void> fakeRq;
 
+        public FakeAwsHttpRequest() {
+        	this.fakeRq = new DefaultRequest<>("fake");
+        	this.fakeRq.setEndpoint(
+        	    URI.create("http://localhost:8080/test")
+        	);
+        }
+        @Override
+        public String getOutput() {
+            return "performed fake request";
+        }
+
+        @Override
+        public Request<Void> request() {
+            return this.fakeRq;
+        }
+
+    }
 }

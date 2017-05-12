@@ -23,27 +23,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.meta.analyzer.aws.handlers;
-
-import java.io.IOException;
-import java.io.StringWriter;
-
-import org.apache.commons.io.IOUtils;
+package com.meta.analyzer.rest.aws.handlers;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.http.HttpResponse;
 import com.amazonaws.http.HttpResponseHandler;
 
 /**
- * A simple aws response handler that only checks that the http status is within the 200 range.
- * If not, {@link AmazonServiceException} is thrown.
+ * Simple exception handler that returns an {@link AmazonServiceException}
+ * containing the HTTP status code and status text.
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 1.0.0
- *
  */
-public class SimpleAwsResponseHandler implements
-    HttpResponseHandler<HttpResponse> {
+public class SimpleAwsErrorHandler implements HttpResponseHandler<AmazonServiceException> {
 
     /**
      * See {@link HttpResponseHandler}, method needsConnectionLeftOpen()
@@ -54,30 +47,15 @@ public class SimpleAwsResponseHandler implements
      * Ctor.
      * @param connectionLeftOpen Should the connection be closed immediately or not?
      */
-    public SimpleAwsResponseHandler(boolean connectionLeftOpen) {
+    public SimpleAwsErrorHandler(boolean connectionLeftOpen) {
         this.needsConnectionLeftOpen = connectionLeftOpen;
     }
 
     @Override
-    public HttpResponse handle(HttpResponse response) {
-
-        int status = response.getStatusCode();
-        if(status < 200 || status >= 300) {
-            String content;
-            final StringWriter writer = new StringWriter();
-            try {
-                IOUtils.copy(response.getContent(), writer, "UTF-8");
-                content = writer.toString();
-            } catch (final IOException e) {
-            	content = "Couldn't get response content!";
-            }
-            AmazonServiceException ase = new AmazonServiceException(content);
-            ase.setStatusCode(status);
-            throw ase;
-        }
-
-        return response;
-        
+    public AmazonServiceException handle(HttpResponse response) {
+        AmazonServiceException ase = new AmazonServiceException(response.getStatusText());
+        ase.setStatusCode(response.getStatusCode());
+        return ase;
     }
 
     @Override

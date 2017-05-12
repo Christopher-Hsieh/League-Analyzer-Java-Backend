@@ -23,19 +23,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.meta.analyzer.aws.request;
+package com.meta.analyzer.rest.aws.request;
 
-import java.util.Map;
+import java.io.InputStream;
+
 import com.amazonaws.Request;
+import com.amazonaws.http.HttpMethodName;
+
 
 /**
- * Aws HTTP request with set headers.
+ * Http POST request sent to AWS.
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 1.0.0
  *
  */
-public final class AwsHttpHeaders<T> extends AwsHttpRequest<T> {
+public final class AwsPost<T> extends AwsHttpRequest<T> {
 
     /**
      * Base request.
@@ -45,12 +48,13 @@ public final class AwsHttpHeaders<T> extends AwsHttpRequest<T> {
     /**
      * Ctor.
      * @param req Base AwsHttpRequest.
-     * @param headers Map of headers to set on the request. Key - headername, value - its value.
+     * @param content InputStream containing this request's content.
      */
-    public AwsHttpHeaders(AwsHttpRequest<T> req, Map<String, String> headers) {
-        this.base = req;
-        this.base.request().getHeaders().putAll(headers);
-    }
+    public AwsPost(AwsHttpRequest<T> req, InputStream content) {
+    	this.base = req;
+        this.base.request().setHttpMethod(HttpMethodName.POST);
+    	this.base.request().setContent(content);
+	}
 
     @Override
     public T getOutput() {
@@ -59,6 +63,6 @@ public final class AwsHttpHeaders<T> extends AwsHttpRequest<T> {
 
     @Override
     Request<Void> request() {
-        return this.base.request();
+    	return this.base.request();
     }
 }

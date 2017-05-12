@@ -23,58 +23,66 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.meta.analyzer.aws.request;
+package com.meta.analyzer.rest.aws.handlers;
 
-import java.net.URI;
+import java.io.IOException;
+import java.io.StringWriter;
 
-import com.amazonaws.DefaultRequest;
-import com.amazonaws.Request;
+import org.apache.commons.io.IOUtils;
+
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.http.HttpResponse;
+import com.amazonaws.http.HttpResponseHandler;
 
 /**
- * Http request sent to AWS.
+ * A simple aws response handler that only checks that the http status is within the 200 range.
+ * If not, {@link AmazonServiceException} is thrown.
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 1.0.0
  *
  */
-public abstract class AwsHttpRequest<T> {
+public class SimpleAwsResponseHandler implements
+    HttpResponseHandler<HttpResponse> {
 
     /**
-     * Perform this request.
+     * See {@link HttpResponseHandler}, method needsConnectionLeftOpen()
      */
-    public abstract T getOutput();
+    private boolean needsConnectionLeftOpen;
 
     /**
-     * Get the aws base request.
-     * @return Request.
+     * Ctor.
+     * @param connectionLeftOpen Should the connection be closed immediately or not?
      */
-    abstract Request<Void> request();
-
-    /**
-     * Fake AwsHttpRequest for unit testing.
-     * @author Mihai Andronache (amihaiemil@gmail.com)
-     * @version $Id$
-     * @since 1.0.0
-     */
-    static class FakeAwsHttpRequest extends AwsHttpRequest<String>{
-
-        private Request<Void> fakeRq;
-
-        public FakeAwsHttpRequest() {
-        	this.fakeRq = new DefaultRequest<>("fake");
-        	this.fakeRq.setEndpoint(
-        	    URI.create("http://localhost:8080/test")
-        	);
-        }
-        @Override
-        public String getOutput() {
-            return "performed fake request";
-        }
-
-        @Override
-        public Request<Void> request() {
-            return this.fakeRq;
-        }
-
+    public SimpleAwsResponseHandler(boolean connectionLeftOpen) {
+        this.needsConnectionLeftOpen = connectionLeftOpen;
     }
+
+    @Override
+    public HttpResponse handle(HttpResponse response) {
+
+        int status = response.getStatusCode();
+        if(status < 200 || status >= 300) {
+            String content;
+            final StringWriter writer = new StringWriter();
+            try {
+                IOUtils.copy(response.getContent(), writer, "UTF-8");
+                content = writer.toString();
+            } catch (final IOException e) {
+            	content = "Couldn't get response content!";
+            }
+            AmazonServiceException ase = new AmazonServiceException(content);
+            ase.setStatusCode(status);
+            throw ase;
+        }
+
+        return response;
+        
+    }
+
+    @Override
+    public boolean needsConnectionLeftOpen() {
+        return this.needsConnectionLeftOpen;
+    }
+
 }

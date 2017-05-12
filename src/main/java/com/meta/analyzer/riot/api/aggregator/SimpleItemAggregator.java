@@ -15,10 +15,10 @@ import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.meta.analyzer.aws.StoreMatchData;
+import com.meta.analyzer.rest.aws.StoreMatchData;
 import com.meta.analyzer.riot.api.grabber.MatchHistory;
 import com.meta.analyzer.riot.api.grabber.MatchItems;
-import com.meta.analyzer.riot.dto.ItemListDto;
+import com.meta.analyzer.riot.dto.RetrievedItemListDto;
 import com.meta.analyzer.riot.dto.MatchDataDto;
 
 import net.rithms.riot.api.RiotApiException;
@@ -81,7 +81,7 @@ public class SimpleItemAggregator {
 				for (long matchID : matchIdList) {
 					currentMatch++;
 					System.out.println("Match " + currentMatch + "/" + totalMatches);
-					ItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, matchHistory.getAccountID());
+					RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, matchHistory.getAccountID());
 					try {
 						Thread.sleep(3000);
 					} catch (InterruptedException e) {

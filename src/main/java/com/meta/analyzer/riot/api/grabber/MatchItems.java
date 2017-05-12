@@ -3,7 +3,7 @@ package com.meta.analyzer.riot.api.grabber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.meta.analyzer.riot.dto.ItemListDto;
+import com.meta.analyzer.riot.dto.RetrievedItemListDto;
 
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
@@ -29,10 +29,10 @@ public class MatchItems {
 	 * getMatchItemsForSummoner(long matchId) - return item list for single match from summoner
 	 * getParticipantId(long matchId) - return summonerName's participantId for that match
 	 */
-	public ItemListDto getMatchItemsForSummoner(long matchID, long accountID) {
+	public RetrievedItemListDto getMatchItemsForSummoner(long matchID, long accountID) {
 
 		ParticipantStats stats = retryOnFailureParticipantStats(matchID, accountID);
-		return new ItemListDto(stats.getItem0(), stats.getItem1(), stats.getItem2(), 
+		return new RetrievedItemListDto(stats.getItem0(), stats.getItem1(), stats.getItem2(), 
 								stats.getItem3(), stats.getItem4(), stats.getItem5(), stats.getItem6());
 	}
 	

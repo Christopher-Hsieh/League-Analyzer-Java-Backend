@@ -23,7 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.meta.analyzer.aws.request;
+package com.meta.analyzer.rest.aws.request;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.ClientConfiguration;

@@ -1,4 +1,4 @@
-package com.meta.analyzer.aws.dto;
+package com.meta.analyzer.rest.aws.dto;
 
 public class MatchDataSearchResultsDto {
 	private String holder = "";

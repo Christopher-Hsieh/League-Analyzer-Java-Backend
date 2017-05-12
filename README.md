@@ -28,6 +28,9 @@ com.meta.analyzer
     ├── .riot.api.grabber		<= Seperate method implementation for Riot Api calls
     │	 	├── MatchHistory	<= Get all info concering match history
     │	 	├── MatchItems		<= Get items based on overall match history, individual match, etc.
+    
+    com.meta.analyzer.rest.aws.*	<= Packages that use REST calls, Queries done through URLs
+    com.meta.analyzer.jest.*		<= Packages that use JEST client, Queries created through ElasticSearch Java API
 ```
 
 ## Code Improvements and Refactoring Needed

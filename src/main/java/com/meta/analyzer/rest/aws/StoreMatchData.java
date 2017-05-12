@@ -1,4 +1,4 @@
-package com.meta.analyzer.aws;
+package com.meta.analyzer.rest.aws;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
@@ -15,13 +15,13 @@ import com.amazonaws.http.ExecutionContext;
 import com.amazonaws.http.HttpResponse;
 import com.amazonaws.http.AmazonHttpClient.RequestExecutionBuilder;
 import com.meta.analyzer.ApplicationProperties;
-import com.meta.analyzer.aws.handlers.SimpleAwsErrorHandler;
-import com.meta.analyzer.aws.handlers.SimpleAwsResponseHandler;
-import com.meta.analyzer.aws.request.AwsHttpHeaders;
-import com.meta.analyzer.aws.request.AwsHttpRequest;
-import com.meta.analyzer.aws.request.AwsPost;
-import com.meta.analyzer.aws.request.EsHttpRequest;
-import com.meta.analyzer.aws.request.SignedRequest;
+import com.meta.analyzer.rest.aws.handlers.SimpleAwsErrorHandler;
+import com.meta.analyzer.rest.aws.handlers.SimpleAwsResponseHandler;
+import com.meta.analyzer.rest.aws.request.AwsHttpHeaders;
+import com.meta.analyzer.rest.aws.request.AwsHttpRequest;
+import com.meta.analyzer.rest.aws.request.AwsPost;
+import com.meta.analyzer.rest.aws.request.EsHttpRequest;
+import com.meta.analyzer.rest.aws.request.SignedRequest;
 
 @Component
 public class StoreMatchData {

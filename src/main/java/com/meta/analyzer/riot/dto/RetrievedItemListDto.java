@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ItemListDto {
+public class RetrievedItemListDto {
 	
 	private ArrayList<Long> itemList = new ArrayList<>();
 
-	public ItemListDto(
+	public RetrievedItemListDto(
 			long item0, long item1, long item2, 
 			long item3, long item4, long item5, long item6){
 		

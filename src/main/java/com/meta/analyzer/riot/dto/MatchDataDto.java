@@ -43,7 +43,7 @@ public class MatchDataDto {
 	long championID;
 	long matchID;
 	long accountID;
-	private ItemListDto itemList;
+	private RetrievedItemListDto itemList;
 	
 	Map<String,Long> itemMap = new HashMap<String,Long>();
 	
@@ -75,11 +75,11 @@ public class MatchDataDto {
 	public void setMatchID(long matchID) {
 		this.matchID = matchID;
 	}
-	private ItemListDto getItemList() {
+	private RetrievedItemListDto getItemList() {
 		return itemList;
 	}
 	
-	public void setItemList(ItemListDto itemList) {
+	public void setItemList(RetrievedItemListDto itemList) {
 		this.itemList = itemList;
 		itemMap.clear();
 		itemMap.put("item0", itemList.getItemList().get(0));

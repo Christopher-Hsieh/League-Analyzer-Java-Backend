@@ -1,4 +1,4 @@
-package com.meta.analyzer.incoming.processor;
+package com.meta.analyzer.service;
 
 import java.util.ArrayList;
 import java.util.Queue;

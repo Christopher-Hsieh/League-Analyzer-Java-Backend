@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.meta.analyzer.jest.PullMatchIds;
+import com.meta.analyzer.service.RateManager;
 
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
@@ -21,21 +22,19 @@ import net.rithms.riot.constant.Platform;
  * Class for making calls to Riot Api for match history and match info
  */
 @Component
-public class GetMatchHistory {
-	
-	@Autowired
-	RiotApi api;
+public class GetMatchHistory {	
 	
 	@Autowired
 	PullMatchIds pullMatchIds;
 	
+	@Autowired
+	RateManager RateManager;
+	
 	private String summonerName;
 	private long summonerID;
 	private long accountID;
-	private Platform platform = Platform.NA;
 	int totalMatches;
 
-	//@PostConstruct
 	/**
 	 * 
 	 * @return Map<Champion ID, ArrayList<Match ID>>
@@ -43,30 +42,17 @@ public class GetMatchHistory {
 	 */
 	public Map<Long, Collection<Long>> getMatchHistory(String newSummonerName)  {
 		this.summonerName = newSummonerName;
-		/*
-		 * Map Champion ID - > List of Match IDs
-		 * 	Map<Long, Collection<Long>>
-		 *	Map<Champion ID, ArrayList<Match ID>>
-		 */
+
 		Map<Long, Collection<Long>> championMatchMap = new HashMap<Long, Collection<Long>>();
+		Summoner summoner = RateManager.getSummonerByName(summonerName);
+
+		setSummonerID(summoner.getId());
+		setAccountID(summoner.getAccountId());
+
 		
-		try {
-			setSummonerID(getSummoner(summonerName).getId());
-			setAccountID(getSummoner(summonerName).getAccountId());
-		} catch (RiotApiException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		MatchList matchList = null;
-		try {
-			matchList = api.getMatchListByAccountId(platform, accountID);
-		} catch (RiotApiException e) {
-			System.out.println("Error Encountered grabbing Champion Match Map in MatchHistory.getMatchHistory()\n" 
-					+e.getMessage()+"\n");
-			
-			e.printStackTrace();
-		}
+
+		MatchList matchList = RateManager.getMatchList(accountID);
+
 		this.totalMatches = matchList.getTotalGames();
 		
 		ArrayList<Long> storedMatchIds = pullMatchIds.pull(summonerName);
@@ -92,12 +78,6 @@ public class GetMatchHistory {
 		}
 		// printChampionMatchMap(championMatchMap);
 		return championMatchMap;
-	}
-
-
-	public Summoner getSummoner(String summonerName) throws RiotApiException {
-		Summoner summoner = api.getSummonerByName(platform, summonerName);
-		return summoner;
 	}
 	
 	public int getTotalMatches() {

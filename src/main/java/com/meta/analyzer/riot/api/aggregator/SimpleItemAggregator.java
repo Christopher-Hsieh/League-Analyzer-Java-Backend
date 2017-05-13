@@ -73,12 +73,7 @@ public class SimpleItemAggregator {
 				currentMatch++;
 				System.out.println("Match " + currentMatch + "/" + totalMatches);
 				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, matchHistory.getAccountID());
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
 				if (itemListData != null) {
 					
 					storeMatchData(
@@ -111,12 +106,7 @@ public class SimpleItemAggregator {
 				currentMatch++;
 				System.out.println("Match " + currentMatch + "/" + totalMatches);
 				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, matchHistory.getAccountID());
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
 				if (itemListData != null) {
 					
 					storeMatchData(

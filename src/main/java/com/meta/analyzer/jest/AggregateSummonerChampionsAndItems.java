@@ -21,7 +21,7 @@ import io.searchbox.core.SearchResult;
 @Service
 public class AggregateSummonerChampionsAndItems {
 	
-	@ Autowired
+	@Autowired
 	JestClientCreator clientCreator;
 	
 	public ArrayList<ExtractedChampionItemCountDto> extractChampionsAndItems(String summonerName) {

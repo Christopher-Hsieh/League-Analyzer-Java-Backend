@@ -11,12 +11,10 @@ import org.springframework.stereotype.Component;
 import com.meta.analyzer.jest.PullMatchIds;
 import com.meta.analyzer.service.RateManager;
 
-import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.api.endpoints.match.dto.MatchList;
 import net.rithms.riot.api.endpoints.match.dto.MatchReference;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
-import net.rithms.riot.constant.Platform;
 
 /*
  * Class for making calls to Riot Api for match history and match info

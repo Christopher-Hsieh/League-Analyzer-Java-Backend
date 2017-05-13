@@ -25,6 +25,8 @@
  */
 package com.meta.analyzer.rest.aws.request;
 
+import java.net.URI;
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.DefaultRequest;
@@ -33,13 +35,7 @@ import com.amazonaws.Response;
 import com.amazonaws.http.AmazonHttpClient;
 import com.amazonaws.http.ExecutionContext;
 import com.amazonaws.http.HttpResponseHandler;
-import com.amazonaws.http.AmazonHttpClient.RequestExecutionBuilder;
 import com.meta.analyzer.ApplicationProperties;
-
-import java.net.URI;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Base HTTP request sent to Amazon ES service using the aws-java-sdk.

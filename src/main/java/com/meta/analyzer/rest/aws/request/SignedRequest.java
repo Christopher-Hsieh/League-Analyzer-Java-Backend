@@ -25,9 +25,6 @@
  */
 package com.meta.analyzer.rest.aws.request;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.amazonaws.Request;
 import com.amazonaws.auth.AWS4Signer;
 import com.amazonaws.auth.AWSCredentials;

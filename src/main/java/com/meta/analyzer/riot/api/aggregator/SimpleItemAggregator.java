@@ -17,6 +17,9 @@ import com.meta.analyzer.riot.api.grabber.GetMatchHistory;
 import com.meta.analyzer.riot.api.grabber.GetMatchItems;
 import com.meta.analyzer.riot.dto.MatchDataDto;
 import com.meta.analyzer.riot.dto.RetrievedItemListDto;
+import com.meta.analyzer.service.RateManager;
+
+import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 
 // Given summoner Name
 // Get Item %'s for all champions
@@ -37,13 +40,17 @@ public class SimpleItemAggregator {
 	
 	@Autowired
 	ApplicationProperties applicationProperties;
+	
+	@Autowired
+	RateManager RateManager;
 		
 	public void pullAndStoreSummonerData(String summonerName) {
 		
 		/*
 		 * Pull Match History
 		 */
-		Map<Long, Collection<Long>> championMatchMap = matchHistory.getMatchHistory(summonerName);
+		Summoner summoner = RateManager.getSummonerByName(summonerName);
+		Map<Long, Collection<Long>> championMatchMap = matchHistory.getMatchHistory(summoner);
 
 		if (championMatchMap.isEmpty()) {
 			System.out.println("No Champions found in match History!");
@@ -55,15 +62,15 @@ public class SimpleItemAggregator {
 		 * Store Match.
 		 */
 		if (applicationProperties.getGetOnlyMostPlayedChampion() == true) {
-			storeMostPlayedChampion(championMatchMap, summonerName);
+			storeMostPlayedChampion(championMatchMap, summoner);
 		}
 		else {
-			storeEntireMatchHistory(championMatchMap, summonerName);
+			storeEntireMatchHistory(championMatchMap, summoner);
 		}
 
 	}
 	
-	public void storeEntireMatchHistory(Map<Long, Collection<Long>> championMatchMap, String summonerName) {
+	public void storeEntireMatchHistory(Map<Long, Collection<Long>> championMatchMap, Summoner summoner) {
 		int currentMatch = 0;
 		int totalMatches = matchHistory.getTotalMatches();
 		
@@ -72,12 +79,12 @@ public class SimpleItemAggregator {
 			for (long matchID : matchIdList) {
 				currentMatch++;
 				System.out.println("Match " + currentMatch + "/" + totalMatches);
-				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, matchHistory.getAccountID());
+				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, summoner.getAccountId());
 
 				if (itemListData != null) {
 					
 					storeMatchData(
-							setMatchData(summonerName, championID, matchID, itemListData)
+							setMatchData(summoner, championID, matchID, itemListData)
 							);
 				}
 			}
@@ -85,7 +92,7 @@ public class SimpleItemAggregator {
 		}
 	}
 	
-	public void storeMostPlayedChampion(Map<Long, Collection<Long>> championMatchMap, String summonerName) {
+	public void storeMostPlayedChampion(Map<Long, Collection<Long>> championMatchMap, Summoner summoner) {
 		// Find Most Played Champ
 		long mostPlayedChampionID = -1;
 		int largestMatchList = 0;
@@ -105,23 +112,25 @@ public class SimpleItemAggregator {
 			for (long matchID : matchIdList) {
 				currentMatch++;
 				System.out.println("Match " + currentMatch + "/" + totalMatches);
-				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, matchHistory.getAccountID());
+				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, summoner.getAccountId());
 
 				if (itemListData != null) {
 					
 					storeMatchData(
-							setMatchData(summonerName, mostPlayedChampionID, matchID, itemListData)
+							setMatchData(summoner, mostPlayedChampionID, matchID, itemListData)
 							);
 				}
 			}
 	}
 	
-	
-	public MatchDataDto setMatchData(String summonerName, long championID, long matchID, RetrievedItemListDto itemListData) {
+	/*
+	 * TODO: remove. we can replace with new MatchDataDto(summoner, championID, matchID, itemListData)
+	 */
+	public MatchDataDto setMatchData(Summoner summoner, long championID, long matchID, RetrievedItemListDto itemListData) {
 		MatchDataDto matchData = new MatchDataDto();
-		matchData.setSummonerName(summonerName);
-		matchData.setSummonerID(matchHistory.getSummonerID());
-		matchData.setAccountID(matchHistory.getAccountID());
+		matchData.setSummonerName(summoner.getName());
+		matchData.setSummonerID(summoner.getId());
+		matchData.setAccountID(summoner.getAccountId());
 		matchData.setChampionID(championID);
 		matchData.setMatchID(matchID);
 		matchData.setItemList(itemListData);

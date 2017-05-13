@@ -30,9 +30,6 @@ public class GetMatchHistory {
 	@Autowired
 	RateManager RateManager;
 	
-	private String summonerName;
-	private long summonerID;
-	private long accountID;
 	int totalMatches;
 
 	/**
@@ -40,22 +37,17 @@ public class GetMatchHistory {
 	 * @return Map<Champion ID, ArrayList<Match ID>>
 	 * @throws RiotApiException
 	 */
-	public Map<Long, Collection<Long>> getMatchHistory(String newSummonerName)  {
-		this.summonerName = newSummonerName;
+	public Map<Long, Collection<Long>> getMatchHistory(Summoner summoner)  {
+
 
 		Map<Long, Collection<Long>> championMatchMap = new HashMap<Long, Collection<Long>>();
-		Summoner summoner = RateManager.getSummonerByName(summonerName);
-
-		setSummonerID(summoner.getId());
-		setAccountID(summoner.getAccountId());
-
 		
 
-		MatchList matchList = RateManager.getMatchList(accountID);
+		MatchList matchList = RateManager.getMatchList(summoner.getAccountId());
 
 		this.totalMatches = matchList.getTotalGames();
 		
-		ArrayList<Long> storedMatchIds = pullMatchIds.pull(summonerName);
+		ArrayList<Long> storedMatchIds = pullMatchIds.pull(summoner.getName());
 		
 		for (int i =0; i < matchList.getEndIndex(); i++) {
 			//Check if matchId is in elastic search already for this summoner
@@ -83,32 +75,7 @@ public class GetMatchHistory {
 	public int getTotalMatches() {
 		return totalMatches;
 	}
-	// Getters and Setters
-	public String getSummonerName() {
-		return summonerName;
-	}
 
-	public void setSummonerName(String summonerName) {
-		this.summonerName = summonerName;
-	}
-	
-	private void setAccountID(long accountID) {
-		this.accountID = accountID;
-	}
-	
-	public long getAccountID() {
-		return accountID;
-	}
-
-
-	public long getSummonerID() {
-		return summonerID;
-	}
-
-
-	public void setSummonerID(long summonerID) {
-		this.summonerID = summonerID;
-	}
 	
 	// Print functions for Debugging
 	public void printChampionMatchMap( Map<Long, Collection<Long>> championMatchMap) throws RiotApiException {

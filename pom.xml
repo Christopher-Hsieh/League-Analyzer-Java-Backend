@@ -25,10 +25,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</properties>
 
 	<repositories>
-		<repository>
+<!-- 		<repository>
 	    	<id>jitpack.io</id>
 	    	<url>https://jitpack.io</url>
-		</repository>
+		</repository> -->
 		<repository>
 	    	<id>data-local</id>
 	    	<name>data</name>

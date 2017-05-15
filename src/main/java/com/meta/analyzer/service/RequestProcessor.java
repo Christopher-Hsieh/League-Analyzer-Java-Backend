@@ -8,24 +8,20 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.meta.analyzer.riot.api.aggregator.SimpleItemAggregator;
+import com.meta.analyzer.riot.api.aggregator.MatchesAggregator;
 
 @Component
 public class RequestProcessor implements Runnable{
 	@Resource
 	Queue<String> incomingSummonerQueue;
 	
-    @Autowired
-    private WebApplicationContext context;
+	@Autowired
+	MatchesAggregator matchesAggregator;
+	
 	
     static Logger logger = Logger.getLogger(RequestProcessor.class.getName());
     
-    public SimpleItemAggregator getSimpleItemAggregator() {
-    	return (SimpleItemAggregator) context.getBean("simpleItemAggregator");
-    }
-	
     @Async
 	public void run(){
 		logger.info("Spawning Request Processor");
@@ -38,7 +34,7 @@ public class RequestProcessor implements Runnable{
 		    	// Make sure match history is as up to date as possible
 //				new Thread(new Runnable() {
 //				     public void run() {
-				    	 getSimpleItemAggregator().pullAndStoreSummonerData(summonerName);
+				    	 matchesAggregator.pullAndStoreSummonerData(summonerName);
 //				     }
 //				}).start();
 			}

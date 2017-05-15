@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.meta.analyzer.jest.client.JestClientCreator;
 import com.meta.analyzer.jest.queries.PutMatchDataQuery;
-import com.meta.analyzer.riot.dto.MatchDataDto;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
@@ -22,8 +21,8 @@ public class PutMatchData {
 
 	static Logger logger = Logger.getLogger(AggregateSummonerChampionsAndItems.class.getName());
 	
-	public int put(MatchDataDto matchData) {
-		Index index = PutMatchDataQuery.getPutMatchDataQuery(matchData);
+	public int put(Object json) {
+		Index index = PutMatchDataQuery.getPutMatchDataQuery(json);
 		
 	    JestClient client = clientCreator.getJestClient();
 

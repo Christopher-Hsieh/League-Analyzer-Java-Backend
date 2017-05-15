@@ -1,15 +1,13 @@
 package com.meta.analyzer.jest.queries;
 
-import com.meta.analyzer.riot.dto.MatchDataDto;
-
 import io.searchbox.core.Index;
 
 public class PutMatchDataQuery {
 	
 	
-	public static Index getPutMatchDataQuery(MatchDataDto matchData) {
+	public static Index getPutMatchDataQuery(Object json) {
 		
-		Index index = new Index.Builder(matchData).index("summoners").type("summoner").build();
+		Index index = new Index.Builder(json).index("summoners").type("summoner").build();
 
 	    return index;
 

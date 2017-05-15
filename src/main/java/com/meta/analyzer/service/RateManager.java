@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
+import net.rithms.riot.api.endpoints.match.dto.Match;
 import net.rithms.riot.api.endpoints.match.dto.MatchList;
 import net.rithms.riot.api.endpoints.match.dto.ParticipantStats;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
@@ -43,6 +44,18 @@ public class RateManager {
 			e.printStackTrace();
 		}
 		return stats;
+	}
+	
+	public Match getMatch(long matchId, long accountID)  {
+		Match match = null;
+		try {
+			rateLimit();
+			match = api.getMatch(platform, matchId);
+		} catch (InterruptedException | RiotApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return match;
 	}
 	
 	public MatchList getMatchList(long accountID) {

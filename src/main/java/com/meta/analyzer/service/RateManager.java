@@ -6,6 +6,8 @@ import java.time.ZoneOffset;
 import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import net.rithms.riot.api.RiotApi;
@@ -16,6 +18,7 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 import net.rithms.riot.constant.Platform;
 
 @Component
+@Scope("prototype")
 public class RateManager {
 	
 	@Autowired
@@ -23,6 +26,10 @@ public class RateManager {
 	
 	@Autowired
 	LinkedList<LocalDateTime> apiCallHistory;
+	
+	@Autowired
+	@Qualifier(value="riotApiLock")
+	Object riotApiLock;
 	
 	private Platform platform = Platform.NA;
 	
@@ -64,21 +71,22 @@ public class RateManager {
 	
 	public void rateLimit() throws InterruptedException {
 		LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
-		
-		if (apiCallHistory.size() < 10) {
-			apiCallHistory.addFirst(currentTime);
-			return;
-		}
-		else {
-			Duration duration = Duration.between(apiCallHistory.getLast(), LocalDateTime.now(ZoneOffset.UTC));
-			// If the 10th call was less 10 seconds ago
-			//		then wait however long until 10 seconds
-			if(duration.toMillis() < 10000) {
-				Thread.sleep(11000 - duration.toMillis());
+		synchronized(riotApiLock) {
+			if (apiCallHistory.size() < 9) {
+				apiCallHistory.addFirst(currentTime);
+				return;
 			}
-			apiCallHistory.removeLast();
+			else {
+				Duration duration = Duration.between(apiCallHistory.getLast(), LocalDateTime.now(ZoneOffset.UTC));
+				// If the 10th call was less 10 seconds ago
+				//		then wait however long until 10 seconds
+				if(duration.toMillis() < 10000) {
+					Thread.sleep(11000 - duration.toMillis());
+				}
+				apiCallHistory.removeLast();
+			}
+			
+			apiCallHistory.addFirst(currentTime);
 		}
-		
-		apiCallHistory.addFirst(currentTime);
 	}
 }

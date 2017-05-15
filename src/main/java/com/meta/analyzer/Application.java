@@ -6,11 +6,17 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+import com.meta.analyzer.service.RequestProcessor;
 
 import net.rithms.riot.api.ApiConfig;
 import net.rithms.riot.api.RiotApi;
@@ -27,6 +33,15 @@ public class Application {
 	
 	@Autowired
 	ApplicationProperties applicationProperties;
+	
+	@Autowired
+	RequestProcessor requestProcessor;
+	
+	
+	@Bean(name = "riotApiLock")
+	public Object riotApiLock(){
+		return new Object();
+	}
 	
 	@Bean
 	public LinkedList<LocalDateTime> apiCallHistory() {

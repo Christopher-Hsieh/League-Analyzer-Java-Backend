@@ -23,7 +23,7 @@ public class MatchIdsQuery {
 	    searchSourceBuilder.query(
 	    		QueryBuilders.termQuery(
 	    			    "summonerName",    	// field
-	    			    summonerName   		// value
+	    			    summonerName.toLowerCase()   		// value
 	    	)
 	     );
 	    searchSourceBuilder.size(DOC_BOUND_SIZE);

@@ -2,6 +2,7 @@ package com.meta.analyzer.jest;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class PutMatchData {
 	@ Autowired
 	JestClientCreator clientCreator;
 
+	static Logger logger = Logger.getLogger(AggregateSummonerChampionsAndItems.class.getName());
 	
 	public int put(MatchDataDto matchData) {
 		Index index = PutMatchDataQuery.getPutMatchDataQuery(matchData);
@@ -33,7 +35,7 @@ public class PutMatchData {
 			e.printStackTrace();
 		}
 		
-	    System.out.println("ES Response with put:\n" + result.getJsonString());
+	    logger.info("ES Response with put:\n" + result.getJsonString());
 
 		return result.getResponseCode();
 	}

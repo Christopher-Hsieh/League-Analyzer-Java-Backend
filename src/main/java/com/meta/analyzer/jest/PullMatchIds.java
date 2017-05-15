@@ -3,6 +3,7 @@ package com.meta.analyzer.jest;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ public class PullMatchIds {
 	@ Autowired
 	JestClientCreator clientCreator;
 
+	static Logger logger = Logger.getLogger(PullMatchIds.class.getName());
 	
 	public ArrayList<Long> pull(String summonerName) {
 		Search search = MatchIdsQuery.getMatchIdsSearch(summonerName);
@@ -37,7 +39,7 @@ public class PullMatchIds {
 			e.printStackTrace();
 		}
 		
-	    System.out.println("ES Response with aggregation:\n" + result.getJsonString());
+	    logger.info("ES Response with aggregation:\n" + result.getJsonString());
 	    
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    JsonNode jsonNodeRoot = null;

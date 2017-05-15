@@ -4,6 +4,7 @@ import java.util.Queue;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -19,19 +20,21 @@ public class RequestProcessor implements Runnable{
     @Autowired
     private WebApplicationContext context;
 	
+    static Logger logger = Logger.getLogger(RequestProcessor.class.getName());
+    
     public SimpleItemAggregator getSimpleItemAggregator() {
     	return (SimpleItemAggregator) context.getBean("simpleItemAggregator");
     }
 	
     @Async
 	public void run(){
-		System.out.println("Spawning Request Processor");
+		logger.info("Spawning Request Processor");
 
 		while (true) {
-			System.out.println("true");
+			logger.info("Processor Running");
 			if (!incomingSummonerQueue.isEmpty()) {
 				String summonerName = incomingSummonerQueue.remove();
-				System.out.println(summonerName + " removed from queue. Queue size now: " + incomingSummonerQueue.size());
+				logger.info(summonerName + " removed from queue. Queue size now: " + incomingSummonerQueue.size());
 		    	// Make sure match history is as up to date as possible
 //				new Thread(new Runnable() {
 //				     public void run() {

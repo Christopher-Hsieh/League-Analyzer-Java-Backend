@@ -3,6 +3,7 @@ package com.meta.analyzer.jest;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class AggregateSummonerChampionsAndItems {
 	@Autowired
 	JestClientCreator clientCreator;
 	
+	static Logger logger = Logger.getLogger(AggregateSummonerChampionsAndItems.class.getName());
+	
 	public ArrayList<ExtractedChampionItemCountDto> extractChampionsAndItems(String summonerName) {
 		Search search = SummonerItemQuery.getChampionItemsSearch(summonerName);
 		
@@ -38,7 +41,7 @@ public class AggregateSummonerChampionsAndItems {
 			e.printStackTrace();
 		}
 		
-	    System.out.println("ES Response with aggregation:\n" + result.getJsonString());
+	    logger.info("ES Response with aggregation:\n" + result.getJsonString());
 	    
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    JsonNode jsonNodeRoot = null;

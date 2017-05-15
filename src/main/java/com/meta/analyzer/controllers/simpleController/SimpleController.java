@@ -20,7 +20,7 @@ import net.rithms.riot.api.RiotApiException;
 
 
 @RestController
-public class summonerController {
+public class SimpleController {
 	
 	@Resource
 	Queue<String> incomingSummonerQueue;
@@ -46,9 +46,9 @@ public class summonerController {
     }
     
     @RequestMapping(value="/aggregateMatchData",method=RequestMethod.GET)
-    public @ResponseBody int queueSummoner(@RequestParam(value="name", required=true) String summonerName) throws RiotApiException {
+    public @ResponseBody String queueSummoner(@RequestParam(value="name", required=true) String summonerName) throws RiotApiException {
     	incomingSummonerQueue.add(summonerName);
-    	return incomingSummonerQueue.size();
+    	return "Currently number " + incomingSummonerQueue.size() + " in Queue./nQueue contains: " + incomingSummonerQueue.toString();
     }
     
     public AggregateSummonerChampionsAndItems getAggregateSummonerChampionsAndItems() {

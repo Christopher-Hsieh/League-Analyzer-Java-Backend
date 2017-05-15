@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.meta.analyzer.ApplicationProperties;
+import com.meta.analyzer.jest.AggregateSummonerChampionsAndItems;
 import com.meta.analyzer.jest.PutMatchData;
 import com.meta.analyzer.riot.api.grabber.GetMatchHistory;
 import com.meta.analyzer.riot.api.grabber.GetMatchItems;
@@ -44,6 +46,8 @@ public class SimpleItemAggregator {
     @Autowired
     private WebApplicationContext context;
     
+    static Logger logger = Logger.getLogger(SimpleItemAggregator.class.getName());
+    
     RateManager rateManager;
 	GetMatchItems matchItems;
 	GetMatchHistory matchHistory;
@@ -64,7 +68,7 @@ public class SimpleItemAggregator {
 		Map<Long, Collection<Long>> championMatchMap = matchHistory.getMatchHistory(summoner);
 
 		if (championMatchMap.isEmpty()) {
-			System.out.println("No Champions found in match History!");
+			logger.info("No Champions found in match History!");
 			return;
 		}
 
@@ -89,7 +93,7 @@ public class SimpleItemAggregator {
 			ArrayList<Long> matchIdList = (ArrayList<Long>) championMatchMap.get(championID);
 			for (long matchID : matchIdList) {
 				currentMatch++;
-				System.out.println("Match " + currentMatch + "/" + totalMatches);
+				logger.info("Match " + currentMatch + "/" + totalMatches);
 				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, summoner.getAccountId());
 
 				if (itemListData != null) {
@@ -119,11 +123,11 @@ public class SimpleItemAggregator {
 			int currentMatch = 0;
 			int totalMatches =  matchIdList.size();
 			
-			System.out.println("Only Getting Most Played Champion");
+			logger.info("Only Getting Most Played Champion");
 			
 			for (long matchID : matchIdList) {
 				currentMatch++;
-				System.out.println("Match " + currentMatch + "/" + totalMatches);
+				logger.info("Match " + currentMatch + "/" + totalMatches);
 				RetrievedItemListDto itemListData = matchItems.getMatchItemsForSummoner(matchID, summoner.getAccountId());
 
 				if (itemListData != null) {
@@ -151,17 +155,8 @@ public class SimpleItemAggregator {
 	}
 	
 	public void storeMatchData(MatchDataDto matchData) {
-		//ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		//try {
-			//String json = ow.writeValueAsString(matchData);
 			int response = putMatchData.put(matchData);
-			System.out.println("Response Code from ES: " + response);
-
-			//System.out.println(json);
-//		} catch (JsonProcessingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+			logger.info("Response Code from ES: " + response);
 	}
 }
 

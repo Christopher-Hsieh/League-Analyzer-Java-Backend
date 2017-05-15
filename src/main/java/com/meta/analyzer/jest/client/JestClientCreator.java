@@ -6,6 +6,7 @@ import java.time.ZoneOffset;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -21,6 +22,7 @@ import vc.inreach.aws.request.AWSSigner;
 import vc.inreach.aws.request.AWSSigningRequestInterceptor;
 
 @Component
+@Scope("prototype") // Means every time this bean is requested. 
 public class JestClientCreator {
 	
 	@Autowired

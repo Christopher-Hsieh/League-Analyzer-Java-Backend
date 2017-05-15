@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.amazonaws.http.HttpResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.meta.analyzer.ApplicationProperties;
-import com.meta.analyzer.rest.aws.SimpleESPost;
+import com.meta.analyzer.jest.PutMatchData;
 import com.meta.analyzer.riot.api.grabber.GetMatchHistory;
 import com.meta.analyzer.riot.api.grabber.GetMatchItems;
 import com.meta.analyzer.riot.dto.MatchDataDto;
@@ -27,29 +31,36 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
  * Get an entire summoners match history worth of items
  */
 @Component
+@Scope("prototype")
 public class SimpleItemAggregator {
 
-	@Autowired
-	GetMatchHistory matchHistory;
-	
-	@Autowired
-	GetMatchItems matchItems;
 
 	@Autowired
-	SimpleESPost simpleESPost;
+	PutMatchData putMatchData;
 	
 	@Autowired
 	ApplicationProperties applicationProperties;
 	
-	@Autowired
-	RateManager RateManager;
+    @Autowired
+    private WebApplicationContext context;
+    
+    RateManager rateManager;
+	GetMatchItems matchItems;
+	GetMatchHistory matchHistory;
+	
+	@PostConstruct
+    public void init() {
+    	this.rateManager = (RateManager) context.getBean("rateManager");
+    	this.matchHistory = (GetMatchHistory) context.getBean("getMatchHistory");
+    	this.matchItems = (GetMatchItems) context.getBean("getMatchItems");
+    }
+    
 		
 	public void pullAndStoreSummonerData(String summonerName) {
-		
 		/*
 		 * Pull Match History
 		 */
-		Summoner summoner = RateManager.getSummonerByName(summonerName);
+		Summoner summoner = rateManager.getSummonerByName(summonerName);
 		Map<Long, Collection<Long>> championMatchMap = matchHistory.getMatchHistory(summoner);
 
 		if (championMatchMap.isEmpty()) {
@@ -98,6 +109,7 @@ public class SimpleItemAggregator {
 		int largestMatchList = 0;
 		for (long championID : championMatchMap.keySet()) {
 			if (largestMatchList < championMatchMap.get(championID).size()) {
+				largestMatchList = championMatchMap.get(championID).size();
 				mostPlayedChampionID = championID;
 			}
 		}
@@ -139,18 +151,17 @@ public class SimpleItemAggregator {
 	}
 	
 	public void storeMatchData(MatchDataDto matchData) {
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		try {
-			String json = ow.writeValueAsString(matchData);
-			HttpResponse response = simpleESPost.post(json, "summoners/summoner");
-			System.out.println("Status Code: " + response.getStatusCode() + 
-								" | Status Text: " + response.getStatusText());
+		//ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		//try {
+			//String json = ow.writeValueAsString(matchData);
+			int response = putMatchData.put(matchData);
+			System.out.println("Response Code from ES: " + response);
 
-			System.out.println(json);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			//System.out.println(json);
+//		} catch (JsonProcessingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }
 

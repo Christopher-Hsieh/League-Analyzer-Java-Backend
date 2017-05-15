@@ -1,7 +1,11 @@
 package com.meta.analyzer.riot.api.grabber;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.meta.analyzer.riot.dto.RetrievedItemListDto;
 import com.meta.analyzer.service.RateManager;
@@ -15,10 +19,22 @@ import net.rithms.riot.api.endpoints.match.dto.ParticipantStats;
  * OUTPUT: aggregate of all items to champion Ids
  */
 @Component
+@Scope("prototype")
 public class GetMatchItems {
 	
-	@Autowired
-	RateManager RateManager;
+    @Autowired
+    private WebApplicationContext context;
+    
+    RateManager rateManager;
+    
+	@PostConstruct
+    public void init() {
+    	this.rateManager = getRateManager();
+    }
+    
+    public RateManager getRateManager() {
+        return (RateManager) context.getBean("rateManager");
+    }
 	
 	/*
 	 * Methods
@@ -27,7 +43,7 @@ public class GetMatchItems {
 	 */
 	public RetrievedItemListDto getMatchItemsForSummoner(long matchID, long accountID) {
 
-		ParticipantStats stats = RateManager.getParticipantStats(matchID, accountID);
+		ParticipantStats stats = rateManager.getParticipantStats(matchID, accountID);
 		return new RetrievedItemListDto(stats.getItem0(), stats.getItem1(), stats.getItem2(), 
 								stats.getItem3(), stats.getItem4(), stats.getItem5(), stats.getItem6());
 	}

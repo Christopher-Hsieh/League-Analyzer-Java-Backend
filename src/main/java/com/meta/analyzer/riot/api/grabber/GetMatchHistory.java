@@ -5,8 +5,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.meta.analyzer.jest.PullMatchIds;
 import com.meta.analyzer.service.RateManager;
@@ -20,13 +24,21 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
  * Class for making calls to Riot Api for match history and match info
  */
 @Component
+@Scope("prototype")
 public class GetMatchHistory {	
 	
-	@Autowired
+	
+    @Autowired
+    private WebApplicationContext context;
+    
+    RateManager rateManager;
 	PullMatchIds pullMatchIds;
 	
-	@Autowired
-	RateManager RateManager;
+	@PostConstruct
+    public void init() {
+    	this.rateManager = (RateManager) context.getBean("rateManager");
+    	this.pullMatchIds = (PullMatchIds) context.getBean("pullMatchIds");
+    }
 	
 	int totalMatches;
 
@@ -41,18 +53,18 @@ public class GetMatchHistory {
 		Map<Long, Collection<Long>> championMatchMap = new HashMap<Long, Collection<Long>>();
 		
 
-		MatchList matchList = RateManager.getMatchList(summoner.getAccountId());
+		MatchList matchList = rateManager.getMatchList(summoner.getAccountId());
 
 		this.totalMatches = matchList.getTotalGames();
-		
+
 		ArrayList<Long> storedMatchIds = pullMatchIds.pull(summoner.getName());
-		
+
 		for (int i =0; i < matchList.getEndIndex(); i++) {
 			//Check if matchId is in elastic search already for this summoner
 			
 			long matchId = matchList.getMatches().get(i).getGameId();
 			
-			if (storedMatchIds.contains(matchId) == false) {
+			if (storedMatchIds == null || storedMatchIds.contains(matchId) == false) {
 				long championId = matchList.getMatches().get(i).getChampion();
 
 				if (championMatchMap.containsKey(championId)) {

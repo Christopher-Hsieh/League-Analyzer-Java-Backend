@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +20,7 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 @Service
+@Scope("prototype") // Means every time this bean is requested. 
 public class AggregateSummonerChampionsAndItems {
 	
 	@Autowired

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,6 +18,7 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 @Component
+@Scope("prototype") // Means every time this bean is requested. 
 public class PullMatchIds {
 	
 	@ Autowired
@@ -49,6 +51,10 @@ public class PullMatchIds {
 			e.printStackTrace();
 		}
 		ArrayList<Long> matchIds = new ArrayList<>();
+		
+		if (!result.isSucceeded()) {
+			return null;
+		}
 		JsonNode node = jsonNodeRoot.get("aggregations").get("terms").withArray("buckets");
 		
 		for(int i = 0; i < node.size(); i++) {

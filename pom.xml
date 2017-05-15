@@ -29,6 +29,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    	<id>jitpack.io</id>
 	    	<url>https://jitpack.io</url>
 		</repository>
+		<repository>
+	    	<id>data-local</id>
+	    	<name>data</name>
+	    	<url>file://${project.basedir}/repo</url>
+	  	</repository>
 	</repositories>
 
 	<dependencies>
@@ -75,6 +80,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<version>v3.8.2</version>
 		</dependency>
 		 -->
+		 <!-- Local only right now -->
+		<dependency>
+		  <groupId>com.github.rithms</groupId>
+		  <artifactId>riot-api-java</artifactId>
+		  <version>3.9.0</version>
+	    </dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>

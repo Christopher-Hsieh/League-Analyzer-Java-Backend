@@ -14,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.meta.analyzer.ApplicationProperties;
 import com.meta.analyzer.jest.PutMatchData;
 import com.meta.analyzer.riot.api.grabber.GetMatchHistory;
-import com.meta.analyzer.riot.dto.MyMatchDataDto;
+import com.meta.analyzer.riot.dto.MatchDataDto;
 import com.meta.analyzer.service.RateManager;
 
 import net.rithms.riot.api.endpoints.match.dto.Match;
@@ -85,7 +85,7 @@ public class MatchesAggregator {
 				currentMatch++;
 				logger.info("Match " + currentMatch + "/" + totalMatches);
 				Match match = rateManager.getMatch(matchID, summoner.getAccountId());
-				putMatchData.put(new MyMatchDataDto(match, summoner));
+				putMatchData.put(new MatchDataDto(match, summoner));
 			}
 
 		}
@@ -117,7 +117,7 @@ public class MatchesAggregator {
 		for (long matchID : matchIdList) {
 
 			Match match = rateManager.getMatch(matchID, summoner.getAccountId());
-			putMatchData.put(new MyMatchDataDto(match, summoner));
+			putMatchData.put(new MatchDataDto(match, summoner));
 		}
 	}
 }

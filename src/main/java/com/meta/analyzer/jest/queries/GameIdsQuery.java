@@ -9,7 +9,7 @@ import io.searchbox.core.Search;
 import io.searchbox.core.search.aggregation.TermsAggregation;
 import io.searchbox.params.Parameters;
 
-public class MatchIdsQuery {
+public class GameIdsQuery {
 	
 	private static final int DOC_BOUND_SIZE = 20000;
 	
@@ -30,7 +30,7 @@ public class MatchIdsQuery {
 
 	    TermsAggregationBuilder terms_agg = AggregationBuilders
 	    		.terms(TermsAggregation.TYPE)
-	    		.field("matchID")
+	    		.field("gameId")
 	    		.size(DOC_BOUND_SIZE);
 
 	    

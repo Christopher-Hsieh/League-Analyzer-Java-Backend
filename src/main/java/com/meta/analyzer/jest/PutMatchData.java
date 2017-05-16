@@ -19,7 +19,7 @@ public class PutMatchData {
 	@ Autowired
 	JestClientCreator clientCreator;
 
-	static Logger logger = Logger.getLogger(AggregateSummonerChampionsAndItems.class.getName());
+	static Logger logger = Logger.getLogger(AggregateChampionItems.class.getName());
 	
 	public int put(Object json) {
 		Index index = PutMatchDataQuery.getPutMatchDataQuery(json);

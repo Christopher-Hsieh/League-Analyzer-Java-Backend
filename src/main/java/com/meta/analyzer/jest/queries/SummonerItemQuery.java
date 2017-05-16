@@ -14,7 +14,7 @@ public class SummonerItemQuery {
 	
 	private static final int DOC_BOUND_SIZE = 20000;
 	
-	public static Search getChampionItemsSearch(String summonerName) {
+	public static Search getChampionItemsSearch(String summonerName, String field) {
 
 		String index = "summoners";
 		String type = "summoner";
@@ -32,11 +32,11 @@ public class SummonerItemQuery {
 
 	    TermsAggregationBuilder terms_agg = AggregationBuilders
 	    		.terms(TermsAggregation.TYPE)
-	    		.field("championID")
+	    		.field("championId")
 	    		.size(DOC_BOUND_SIZE)
 	    		.subAggregation(AggregationBuilders
 	    	    		.terms(TermsAggregation.TYPE)
-	    	    		.field("itemMap.item0")
+	    	    		.field(field)
 	    	    		.size(DOC_BOUND_SIZE));
 
 	    

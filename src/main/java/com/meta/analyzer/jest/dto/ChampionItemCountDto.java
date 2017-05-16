@@ -3,13 +3,13 @@ package com.meta.analyzer.jest.dto;
 import java.util.ArrayList;
 
 
-public class ExtractedChampionItemCountDto {
+public class ChampionItemCountDto {
 	
 	int championId;
 	int gamesPlayed;
-	ArrayList<ExtractedItemTotalsDto> itemTotalsList;
+	ArrayList<ItemDto> itemTotalsList;
 
-	public ExtractedChampionItemCountDto(int championId, int gamesPlayedAsChampion, ArrayList<ExtractedItemTotalsDto> itemTotalsList) {
+	public ChampionItemCountDto(int championId, int gamesPlayedAsChampion, ArrayList<ItemDto> itemTotalsList) {
 		this.itemTotalsList = itemTotalsList;
 		this.championId = championId;
 		this.gamesPlayed = gamesPlayedAsChampion;
@@ -23,7 +23,7 @@ public class ExtractedChampionItemCountDto {
 		return gamesPlayed;
 	}
 	
-	public ArrayList<ExtractedItemTotalsDto> getItemTotalsList() {
+	public ArrayList<ItemDto> getItemTotalsList() {
 		return itemTotalsList;
 	}
 

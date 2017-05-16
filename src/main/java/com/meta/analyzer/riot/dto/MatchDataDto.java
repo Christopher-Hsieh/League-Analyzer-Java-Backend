@@ -9,13 +9,13 @@ import net.rithms.riot.api.endpoints.match.dto.ParticipantStats;
 import net.rithms.riot.api.endpoints.match.dto.Rune;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 
-public class MyMatchDataDto {
+public class MatchDataDto {
 
-	public MyMatchDataDto(Match match, Summoner summoner) {
+	public MatchDataDto(Match match, Summoner summoner) {
 
 		// Match 
 		this.gameId = match.getGameId();
-		
+		this.gameCreation = match.getGameCreation();
 		// Participant
 		Participant participant = match.getParticipantByAccountId(summoner.getAccountId());
 		this.championId = participant.getChampionId();
@@ -43,6 +43,9 @@ public class MyMatchDataDto {
 		// Participant Timeline
 		//this.role = match.getParticipantIdentities().get(participantId);
 	}
+	// Match
+	private long gameId;
+	private long gameCreation;
 	
 	// Participant
 	private int championId;
@@ -70,11 +73,11 @@ public class MyMatchDataDto {
 	// Participant Timeline
 	//private String role;
 	
-	// Match
-	private long gameId;
-	
 	public long getGameId() {
 		return gameId;
+	}
+	public long getGameCreation() {
+		return gameCreation;
 	}
 	public int getChampionId() {
 		return championId;

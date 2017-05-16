@@ -12,7 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meta.analyzer.jest.client.JestClientCreator;
-import com.meta.analyzer.jest.queries.MatchIdsQuery;
+import com.meta.analyzer.jest.queries.GameIdsQuery;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
@@ -20,15 +20,15 @@ import io.searchbox.core.SearchResult;
 
 @Component
 @Scope("prototype") // Means every time this bean is requested. 
-public class PullMatchIds {
+public class PullGameIds {
 	
 	@ Autowired
 	JestClientCreator clientCreator;
 
-	static Logger logger = Logger.getLogger(PullMatchIds.class.getName());
+	static Logger logger = Logger.getLogger(PullGameIds.class.getName());
 	
 	public ArrayList<Long> pull(String summonerName) {
-		Search search = MatchIdsQuery.getMatchIdsSearch(summonerName);
+		Search search = GameIdsQuery.getMatchIdsSearch(summonerName);
 		
 	    JestClient client = clientCreator.getJestClient();
 	    SearchResult result = null;

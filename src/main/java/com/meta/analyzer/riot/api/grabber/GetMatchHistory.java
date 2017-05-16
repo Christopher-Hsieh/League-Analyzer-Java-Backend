@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.meta.analyzer.jest.PullMatchIds;
+import com.meta.analyzer.jest.PullGameIds;
 import com.meta.analyzer.service.RateManager;
 
 import net.rithms.riot.api.RiotApiException;
@@ -24,21 +24,17 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
  * Class for making calls to Riot Api for match history and match info
  */
 @Component
-@Scope("prototype")
 public class GetMatchHistory {	
 	
 	
     @Autowired
     private WebApplicationContext context;
     
+    @Autowired
     RateManager rateManager;
-	PullMatchIds pullMatchIds;
-	
-	@PostConstruct
-    public void init() {
-    	this.rateManager = (RateManager) context.getBean("rateManager");
-    	this.pullMatchIds = (PullMatchIds) context.getBean("pullMatchIds");
-    }
+    
+    @Autowired
+	PullGameIds pullMatchIds;
 	
 	int totalMatches;
 

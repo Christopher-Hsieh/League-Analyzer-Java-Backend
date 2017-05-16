@@ -5,12 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.meta.analyzer.jest.PullGameIds;
 import com.meta.analyzer.service.RateManager;
@@ -25,10 +21,6 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
  */
 @Component
 public class GetMatchHistory {	
-	
-	
-    @Autowired
-    private WebApplicationContext context;
     
     @Autowired
     RateManager rateManager;

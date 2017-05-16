@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -107,42 +106,4 @@ public class AggregateChampionItems {
 		return itemCounts;
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * Overall extraction method
-	 */
-	private ArrayList<ChampionItemCountDto> extractChampionItemsNodes(JsonNode championItemsNodeArray) {
-		ArrayList<ChampionItemCountDto> championItemCountList = new ArrayList<>();
-		int championId = championItemsNodeArray.get(0).get("key").asInt();
-		int gamesPlayed = championItemsNodeArray.get(0).get("doc_count").asInt();
-			
-		JsonNode itemsJsonNode = championItemsNodeArray.get(0).get("terms").get("buckets");
-			
-		//championItemCountList.add(new ExtractedChampionItemCountDto(championId, gamesPlayed, getItemTotalsList (itemsJsonNode)));
-
-		return championItemCountList;
-	}
-	
-	/*
-	 * Extract Items from a node
-	 */
-//	private ArrayList<ItemTotalsDto> getItemTotalsList (JsonNode itemsJsonNode) {
-//		ArrayList<ItemTotalsDto> itemTotalsList = new ArrayList<>();
-//		for(int i = 0; i < itemsJsonNode.size(); i++) {
-//			int itemId = itemsJsonNode.get(i).get("key").asInt();
-//			int itemCount = itemsJsonNode.get(i).get("doc_count").asInt();
-//			itemTotalsList.add(new ItemTotalsDto(itemId, itemCount));
-//		}
-//		return itemTotalsList;
-//	}
-	
 }

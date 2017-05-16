@@ -58,7 +58,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		    <artifactId>aws-signing-request-interceptor</artifactId>
 		    <version>0.0.16</version>
 		</dependency>
-
         
         
 		<!-- Riot API Wrapper. Important: Check update version for V4 eventually

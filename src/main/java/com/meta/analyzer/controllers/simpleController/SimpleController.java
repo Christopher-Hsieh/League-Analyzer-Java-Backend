@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import javax.annotation.Resource;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.meta.analyzer.jest.AggregateChampionItems;
 import com.meta.analyzer.jest.dto.ChampionItemCountDto;
+import com.meta.analyzer.service.StaticRiotApiCalls;
 
 import net.rithms.riot.api.RiotApiException;
 
@@ -27,21 +29,25 @@ public class SimpleController {
 	@Autowired
 	AggregateChampionItems aggregate;
 	
+	@Autowired
+	StaticRiotApiCalls staticRiotApiCalls;
 
 
     @RequestMapping(value="/getBuilds", method=RequestMethod.GET)
-    public @ResponseBody ChampionItemCountDto sayHello(@RequestParam(value="name", required=true) String summonerName) throws IOException  {
+    public @ResponseBody Object sayHello(@RequestParam(value="name", required=true) String summonerName) throws IOException  {
     	// Aggregate their matches!
     	
     	ChampionItemCountDto championItemList = aggregate.extractChampionItems(summonerName);
-
-    	return championItemList;
+    	return staticRiotApiCalls.buildChampionItemsJson(championItemList);
     }
     
     @RequestMapping(value="/aggregateMatchData",method=RequestMethod.GET)
     public @ResponseBody String queueSummoner(@RequestParam(value="name", required=true) String summonerName) throws RiotApiException {
+    	if (incomingSummonerQueue.contains(summonerName)) {
+    		return "Name is already queued! Current Queue: " + incomingSummonerQueue.toString();
+    	}
     	incomingSummonerQueue.add(summonerName);
-    	return "Currently number " + incomingSummonerQueue.size() + " in Queue./nQueue contains: " + incomingSummonerQueue.toString();
+    	return "Currently number " + incomingSummonerQueue.size() + " in Queue. Current Queue: " + incomingSummonerQueue.toString();
     }
     
 //    public AggregateChampionItems getAggregateSummonerChampionsAndItems() {

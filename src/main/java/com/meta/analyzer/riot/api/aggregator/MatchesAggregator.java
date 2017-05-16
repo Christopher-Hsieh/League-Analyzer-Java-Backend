@@ -117,7 +117,9 @@ public class MatchesAggregator {
 		for (long matchID : matchIdList) {
 
 			Match match = rateManager.getMatch(matchID, summoner.getAccountId());
-			putMatchData.put(new MatchDataDto(match, summoner));
+			if (match != null) {
+				putMatchData.put(new MatchDataDto(match, summoner));
+			}
 		}
 	}
 }

@@ -72,7 +72,9 @@ public class AggregateChampionItems {
 	    
 	    for (Map.Entry<Integer, Integer> entry : itemCounts.entrySet()) {
 	    	System.out.println(entry.getKey() + "/" + entry.getValue());
-	    	itemTotals.add(new ItemDto(entry.getKey(), entry.getValue()));
+	    	if (entry.getKey() != 0) { // Skip no item in slot
+	    		itemTotals.add(new ItemDto(entry.getKey(), entry.getValue()));
+	    	}
 	    }
 	    
 

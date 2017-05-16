@@ -1,5 +1,7 @@
 package com.meta.analyzer.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 import javax.annotation.Resource;
@@ -22,12 +24,14 @@ public class RequestProcessor implements Runnable{
 	
     static Logger logger = Logger.getLogger(RequestProcessor.class.getName());
     
+
+    
     @Async
 	public void run(){
 		logger.info("Spawning Request Processor");
 
 		while (true) {
-			//logger.info("Processor Running");
+			logger.info("Processor Running");
 			if (!incomingSummonerQueue.isEmpty()) {
 				String summonerName = incomingSummonerQueue.remove();
 				logger.info(summonerName + " removed from queue. Queue size now: " + incomingSummonerQueue.size());

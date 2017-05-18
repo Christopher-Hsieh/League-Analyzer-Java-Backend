@@ -1,6 +1,6 @@
 package com.meta.analyzer.service;
 
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 
 import javax.annotation.Resource;
 
@@ -14,15 +14,24 @@ import com.meta.analyzer.riot.api.aggregator.MatchesAggregator;
 @Component
 public class RequestProcessor implements Runnable{
 	@Resource
-	Queue<String> incomingSummonerQueue;
+	BlockingQueue<String> incomingSummonerQueue;
 	
 	@Autowired
 	MatchesAggregator matchesAggregator;
 	
 	
     static Logger logger = Logger.getLogger(RequestProcessor.class.getName());
-    
 
+
+    private String TryTakeSummonerName() {
+    	String summonerName = null;
+		try {
+			summonerName = incomingSummonerQueue.take();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return summonerName;
+	}
     
     @Async
 	public void run(){
@@ -30,17 +39,17 @@ public class RequestProcessor implements Runnable{
 
 		while (true) {
 			logger.info("Processor Running");
-			if (!incomingSummonerQueue.isEmpty()) {
-				String summonerName = incomingSummonerQueue.remove();
-				logger.info(summonerName + " removed from queue. Queue size now: " + incomingSummonerQueue.size());
+			String summonerName = TryTakeSummonerName();
+			logger.info(summonerName + " removed from queue. Queue size now: " + incomingSummonerQueue.size());
 		    	// Make sure match history is as up to date as possible
 //				new Thread(new Runnable() {
 //				     public void run() {
 				    	 matchesAggregator.pullAndStoreSummonerData(summonerName);
 //				     }
 //				}).start();
-			}
 		}
 	
 	}
+
+
 }

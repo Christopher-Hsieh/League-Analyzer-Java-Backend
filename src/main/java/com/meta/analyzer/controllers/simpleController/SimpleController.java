@@ -2,6 +2,7 @@ package com.meta.analyzer.controllers.simpleController;
 
 import java.io.IOException;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 
 import javax.annotation.Resource;
 
@@ -24,7 +25,7 @@ import net.rithms.riot.api.RiotApiException;
 public class SimpleController {
 	
 	@Resource
-	Queue<String> incomingSummonerQueue;
+	BlockingQueue<String> incomingSummonerQueue;
     
 	@Autowired
 	AggregateChampionItems aggregate;

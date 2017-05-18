@@ -4,6 +4,8 @@ package com.meta.analyzer;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -38,7 +40,7 @@ public class Application {
 	public Object riotApiLock(){
 		return new Object();
 	}
-	
+
 	@Bean
 	public LinkedList<LocalDateTime> apiCallHistory() {
 		LinkedList<LocalDateTime> apiCallHistory = new LinkedList<LocalDateTime>();
@@ -46,8 +48,8 @@ public class Application {
 	}
 	
 	@Bean
-	public Queue<String> incomingSummonerQueue() {
-		Queue<String> incomingSummonerQueue = new LinkedList<String>();
+	public BlockingQueue<String> incomingSummonerQueue() {
+		BlockingQueue<String> incomingSummonerQueue = new LinkedBlockingQueue<>();
 		return incomingSummonerQueue;
 	}
 	

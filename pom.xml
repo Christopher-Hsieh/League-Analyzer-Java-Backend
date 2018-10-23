@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.LeagueAnalyzerJavaBackend</groupId>
+	<artifactId>league.analyzer.java.backend</artifactId>
+	<version>0.0.2-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>league.analyzer.java.backend</name>
+	<description>League Spring Boot Back end Analyzer</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.2.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<repositories>
+<!-- 		<repository>
+	    	<id>jitpack.io</id>
+	    	<url>https://jitpack.io</url>
+		</repository> -->
+		<repository>
+	    	<id>data-local</id>
+	    	<name>data</name>
+	    	<url>file://${project.basedir}/repo</url>
+	  	</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- ElasticSearch Java API -->
+		<dependency>
+		    <groupId>org.elasticsearch</groupId>
+		    <artifactId>elasticsearch</artifactId>
+		    <version>5.4.0</version>
+		</dependency>
+		
+		
+		<!-- https://mvnrepository.com/artifact/io.searchbox/jest -->
+		<!-- Java Client for ES REST Calls -->
+		<dependency>
+		    <groupId>io.searchbox</groupId>
+		    <artifactId>jest</artifactId>
+		    <version>2.4.0</version>
+		<!-- Sign our Jest Client -->
+		</dependency>
+			<dependency>
+		    <groupId>vc.inreach.aws</groupId>
+		    <artifactId>aws-signing-request-interceptor</artifactId>
+		    <version>0.0.16</version>
+		</dependency>
+        
+        
+		<!-- Riot API Wrapper. Important: Check update version for V4 eventually
+			Right now we manually import the .jar for v3.9.0, not only v3.8.2 is on jitpack
+		 -->
+<!-- 		<dependency>
+			<groupId>com.github.rithms</groupId>
+			<artifactId>riot-api-java</artifactId>
+			<version>v3.8.2</version>
+		</dependency>
+		 -->
+		 <!-- Local only right now -->
+		<dependency>
+		  <groupId>com.github.rithms</groupId>
+		  <artifactId>riot-api-java</artifactId>
+		  <version>3.9.0</version>
+	    </dependency>
+		<!-- Needed to parse riot-api-java wrapper data -->
+		<dependency>
+    		<groupId>com.google.code.gson</groupId>
+    		<artifactId>gson</artifactId>
+    		<version>2.8.0</version>
+		</dependency>
+		
+		
+		<!-- Logging -->
+		<dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.7</version>
+        </dependency>
+        
+		
+		<!-- Basic Spring -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-actuator-docs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cloud-connectors</artifactId>
+		</dependency>
+<!--		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-security</artifactId>
+		</dependency>
+  		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-mockmvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Dalston.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>
